@@ -3,20 +3,24 @@ import hashlib
 import time
 
 def hash(args):
-    hash = hashlib.new(args[0])
-    with open(args[1],"r") as fIn: 
-        with open(args[2],"w") as fOut:
-            for word in fIn:
+    with open('dictionary.txt', 'r') as fIn:
+        words = fIn.read().splitlines()
+        hash = hashlib.new(args[0])
+     
+        with open(args[1],"w") as fOut:
+            for word in words:
                 hash.update(word.encode())
                 fOut.write(hash.hexdigest() + "\n")
 
     
 if __name__ == '__main__':
     start_time = time.perf_counter()
-    inFiles = ['dictionary.txt','dictionary.txt','dictionary.txt']
+    inF = open('dictionary.txt', 'r')
+
+
     outFiles = ['sha1_results.txt', 'sha256_results.txt', 'md5_results.txt']
     hashes = ["sha1", "sha256", "md5"]  
-    args = list(zip(hashes, inFiles, outFiles))
+    args = list(zip(hashes, outFiles))
 
     pool = Pool(3)
     pool.map(hash, args)
