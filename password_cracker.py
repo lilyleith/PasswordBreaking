@@ -70,7 +70,7 @@ def leetSpeakConversion(word, iteration):
 # MAX INDEX = 2 LEN 3 INDEX - INDEX LEN MINUS LEN
     leetWord = "".join([translations[letter][0] for letter in word])
 
-    for i in range(2):
+    
 
 
 
