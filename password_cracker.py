@@ -1,5 +1,5 @@
 import hashlib
-from multiprocessing import Pool
+
 import time
 import numpy as np
 from itertools import product
