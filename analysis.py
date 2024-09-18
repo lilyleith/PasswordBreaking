@@ -22,9 +22,9 @@ def translateOneLetterWords(currentMapping, oneLetterWords):
     return oneLetterWords
 
 # translate the wordList using currentMapping 
-def translateWordList(currentMapping, wordList):
+def translateWordDict(currentMapping, wordDict):
     
-    for encryptedWord in wordList.keys():
+    for encryptedWord in wordDict.keys():
         # split the word into a list so that we can translate each letter independently
         # stops us from updating already translated letters to incorrect mappings
         letterList = [letter for letter in encryptedWord]
@@ -40,13 +40,34 @@ def translateWordList(currentMapping, wordList):
             index += 1
         
         # store translation in the wordList dictionary
-        wordList[encryptedWord] = "".join(letterList)
+        wordDict[encryptedWord] = "".join(letterList)
     # return the wordList
+    return wordDict
+
+# creates a fully translated list of the encryptedWords passed using the currentMapping
+def translateWordList(currentMapping, encryptedWords):
+    wordList = []
+    for word in encryptedWords:
+        # split the word into a list so that we can translate each letter independently
+        # stops us from updating already translated letters to incorrect mappings
+        letterList = [letter for letter in word]
+        index = 0
+        # iterate through each letter
+        for letter in letterList:
+            # if the letter defined in the mapping, then replace it with its mapping
+            if letter in currentMapping.keys():
+                letterList[index] = currentMapping[letter]
+            # update the index
+            index += 1
+        wordList.append("".join(letterList))
     return wordList
+    
+        
+
 
 # create and return a dict with keys that are unique words of len length from the encrypted text and the
 # values are empty strings
-def createWordListByLength(encryptedWords, length):
+def createWordDictByLength(encryptedWords, length):
     # create dict
     wordList = {}
     for word in encryptedWords:
@@ -98,8 +119,8 @@ if __name__ == '__main__':
     encrytedWords = []
 
     # a dictionary mapping each encrypted word in the file to its translation, including punctuation for context
-    fullTranslation = {}
-
+    fullTranslation = []
+    encryptedWordsWithPunctuation = []
 
     # first step in the process was getting a list of all the words stripped of punctuation 
     with open("encrypted.txt") as encrypted:
@@ -107,7 +128,7 @@ if __name__ == '__main__':
         # add the word with punctuation to the fullTranslation dictionary
         # remove periods, semicolons, apostrophes and commas from each word and store in encrypted word list
         for word in line.split(" "):
-            fullTranslation[word] = ""
+            encryptedWordsWithPunctuation.append(word)
             word = word.replace(",","")
             word = word.replace(".","")
             word = word.replace("'","")
@@ -116,10 +137,10 @@ if __name__ == '__main__':
     
     # took inventory of all the one letter words, two letter words, three letter words, and four letter words
     
-    oneLetterWords = createWordListByLength(encrytedWords, 1)
-    twoLetterWords = createWordListByLength(encrytedWords, 2)
-    threeLetterWords = createWordListByLength(encrytedWords, 3)
-    fourLetterWords = createWordListByLength(encrytedWords, 4)
+    oneLetterWords = createWordDictByLength(encrytedWords, 1)
+    twoLetterWords = createWordDictByLength(encrytedWords, 2)
+    threeLetterWords = createWordDictByLength(encrytedWords, 3)
+    fourLetterWords = createWordDictByLength(encrytedWords, 4)
 
     # created dict of all the double letter words: 
     doubleLetterWords = {}
@@ -146,19 +167,21 @@ if __name__ == '__main__':
     # now I test the current mapping against the two, three, four and double letter words to find any pattern
 
     # starting with the two letter words
-    twoLetterWords = translateWordList(currentMapping, twoLetterWords)
+    twoLetterWords = translateWordDict(currentMapping, twoLetterWords)
 
     # and then double letter words
-    doubleLetterWords = translateWordList(currentMapping, doubleLetterWords)
+    doubleLetterWords = translateWordDict(currentMapping, doubleLetterWords)
 
     # three letter words
-    threeLetterWords = translateWordList(currentMapping, threeLetterWords)
+    threeLetterWords = translateWordDict(currentMapping, threeLetterWords)
 
     # four letter words 
-    fourLetterWords = translateWordList(currentMapping, fourLetterWords)
+    fourLetterWords = translateWordDict(currentMapping, fourLetterWords)
 
-    # translate the entire file. I only started doing this in my 4th execution
-    fullTranslation = translateWordList(currentMapping, fullTranslation)
+    # translate the entire file
+    fullTranslation = translateWordList(currentMapping, encryptedWordsWithPunctuation)
+
+    
 
     # count the instances of each letter in the encrypted text to determine which might map to 
     # uncommon english letters
@@ -166,6 +189,16 @@ if __name__ == '__main__':
     mostUncommonLetters = [[key, letterCounts[key]] for key in letterCounts.keys() if letterCounts[key] < 10]
     mostCommonLetters = [[key, letterCounts[key]] for key in letterCounts.keys() if letterCounts[key] > 20]
     mostCommonLetters.sort(key = lambda item:item[1], reverse = True)
+
+    # individually change the incorrect "q"->"f" mappings to "k"
+    for index in range(len(fullTranslation)):
+        lifeCount = 0
+        if fullTranslation[index] == "find":
+            fullTranslation[index] = "kind"
+        if fullTranslation[index] == "life" and lifeCount == 0:
+            lifeCount += 1
+        elif fullTranslation[index] == "life" and lifeCount == 1:
+            fullTranslation[index] = "like"
 
     
     # now I print these dicts and see if I can sense any pattern or success emerging
@@ -182,7 +215,7 @@ if __name__ == '__main__':
 
     # I have found the full translation of the ciphertext. write it into a file for submission. 
     plain = open("plaintext.txt", "w")
-    plaintext = " ".join(list(fullTranslation.values()))
+    plaintext = " ".join(fullTranslation)
     plain.write(plaintext.strip(" "))
     plain.close()
 

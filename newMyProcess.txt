@@ -260,6 +260,10 @@ full translated text:
  mind, too, life world outside, shifts changes, adapting weather thoughts feelings. 
  it these moments transformation feels most alive, aware depths mysteries within.
 
-My observations: ciphertext is fully translated to plaintext
+My observations: there are a few words that don't make sense in context with my current mapping;
+"life world outside" sounds like it should be "like world outside" and "find quiet peace" sounds 
+like it should be "kind quiet peace". So the mapping is not one to one, and the letter "q" probably
+maps to both "f" and "k". 
+I resolved this by individually changing these incorrect mappings after the currentMapping was done.
 
 
