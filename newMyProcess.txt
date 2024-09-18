@@ -58,12 +58,13 @@ Translated double letter words:
  {'bpp': 'app', 'rffv': 'reev', 'qbpp': 'qapp', 'tellfv': 'tellev', 'bwwfnsbvwf': 'awwentavwe', 'qdppt': 'qdppt', 'bubcfvftt': 'auacevett', 'sjj': 'tjj', 'qffpdvit': 'qeepdvit', 'qffpt': 'qeept'}
 
 full translated text:
- app tme xacdetk, wmacg, reaetk jq pdqe dt gale en pdimt avl tmalju. 
- lak tmat mal reev wpeac rcdimt reiav tj wpjel jxec; lcjnt cadv qapp. 
- jve rk jve, tmjte acjevl tjeimt tmeptec, ret tmece uat a ydvl hedet neawe dv tellev wmavie. 
- tjgetmdvi wapgdvi awwentavwe umat wjget, cetdivatdjv eveonewtel, qdppt meact udtm veu auacevett. 
- gdvl, tjj, pdye ujcpl jettdle, tmdqtt wmaviet, alantdvi ueatmec tmjeimtt qeepdvit. 
- dt tmete gjgevtt tcavtqjcgatdjv qeept gjtt apdxe, auace lentmt gkttecdet udtmdv.
+ app tme xacdetk, app tme wmacg, app tme reaetk jq pdqe dt gale en jq pdimt avl tmalju. 
+ tme lak tmat mal reev wpeac avl rcdimt reiav tj wpjel jxec; lcjnt jq cadv reiav tj qapp. 
+ jve rk jve, tmjte acjevl tjeimt tmeptec, ret tmece uat a ydvl jq hedet avl neawe dv tme tellev wmavie. 
+ tmece dt tjgetmdvi wapgdvi dv tme awwentavwe jq umat wjget, a cetdivatdjv tj tme eveonewtel, tmat qdppt 
+ tme meact udtm a veu ydvl jq auacevett. tme gdvl, tjj, pdye tme ujcpl jettdle, tmdqtt avl wmaviet, alantdvi 
+ tj tme veu ueatmec jq tmjeimtt avl qeepdvit. dt dt dv tmete gjgevtt jq tcavtqjcgatdjv tmat jve qeept gjtt 
+ apdxe, gjtt auace jq tme lentmt avl gkttecdet udtmdv. 
 
 
 
@@ -98,12 +99,14 @@ Translated double letter words:
  {'bpp': 'all', 'rffv': 'reev', 'qbpp': 'qall', 'tellfv': 'tellev', 'bwwfnsbvwf': 'awwentavwe', 'qdppt': 'qdllt', 'bubcfvftt': 'auacevett', 'sjj': 'too', 'qffpdvit': 'qeeldvit', 'qffpt': 'qeelt'}
 
 full translated text:
- all the xacdetk, whacg, reaetk oq ldqe dt gale en ldiht avl thalou. 
- lak that hal reev wleac rcdiht reiav to wloel oxec; lcont cadv qall. 
- ove rk ove, thote acoevl toeiht theltec, ret thece uat a ydvl hedet neawe dv tellev whavie. 
- togethdvi walgdvi awwentavwe uhat woget, cetdivatdov eveonewtel, qdllt heact udth veu auacevett. 
- gdvl, too, ldye uocll oettdle, thdqtt whaviet, alantdvi ueathec thoeihtt qeeldvit. 
- dt thete gogevtt tcavtqocgatdov qeelt gott aldxe, auace lentht gkttecdet udthdv.
+ all the xacdetk, all the whacg, all the reaetk oq ldqe dt gale en oq ldiht avl thalou. 
+ the lak that hal reev wleac avl rcdiht reiav to wloel oxec; lcont oq cadv reiav to qall. 
+ ove rk ove, thote acoevl toeiht theltec, ret thece uat a ydvl oq hedet avl neawe dv the 
+ tellev whavie. thece dt togethdvi walgdvi dv the awwentavwe oq uhat woget, a cetdivatdov to 
+ the eveonewtel, that qdllt the heact udth a veu ydvl oq auacevett. the gdvl, too, ldye the 
+ uocll oettdle, thdqtt avl whaviet, alantdvi to the veu ueathec oq thoeihtt avl qeeldvit. 
+ dt dt dv thete gogevtt oq tcavtqocgatdov that ove qeelt gott aldxe, gott auace oq the lentht 
+ avl gkttecdet udthdv.
  
 
 Process execution round 2:
@@ -128,12 +131,13 @@ Translated double letter words:
  {'bpp': 'all', 'rffv': 'reen', 'qbpp': 'qall', 'tellfv': 'sedden', 'bwwfnsbvwf': 'awwentanwe', 'qdppt': 'qills', 'bubcfvftt': 'auaceness', 'sjj': 'too', 'qffpdvit': 'qeelinis', 'qffpt': 'qeels'}
 
 full translated text:
- all the xacietk, whacg, reaetk oq liqe is gade en liiht and shadou. 
- dak that had reen wleac rciiht reian to wloed oxec; dcons cain qall. 
- one rk one, those acoend soeiht sheltec, ret thece uas a yind heiet neawe in sedden whanie. 
- sogethini walgini awwentanwe uhat woges, cesiination eneonewted, qills heact uith neu auaceness. 
- gind, too, liye uocld oetside, shiqts whanies, adantini ueathec thoeihts qeelinis. 
- it these gogents tcansqocgation qeels gost alixe, auace denths gkstecies uithin.
+ all the xacietk, all the whacg, all the reaetk oq liqe is gade en oq liiht and shadou. 
+ the dak that had reen wleac and rciiht reian to wloed oxec; dcons oq cain reian to qall. 
+ one rk one, those acoend soeiht sheltec, ret thece uas a yind oq heiet and neawe in the sedden whanie. 
+ thece is sogethini walgini in the awwentanwe oq uhat woges, a cesiination to the eneonewted, that 
+ qills the heact uith a neu yind oq auaceness. the gind, too, liye the uocld oetside, shiqts and whanies,
+adantini to the neu ueathec oq thoeihts and qeelinis. it is in these gogents oq tcansqocgation that one
+qeels gost alixe, gost auace oq the denths and gkstecies uithin. 
 
 
 My observations: It seems like there are some words that I can directly resolve from the partial translation 
@@ -162,12 +166,14 @@ Translated double letter words:
  {'bpp': 'all', 'rffv': 'been', 'qbpp': 'qall', 'tellfv': 'sedden', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'qills', 'bubcfvftt': 'awaceness', 'sjj': 'too', 'qffpdvit': 'qeelinis', 'qffpt': 'qeels'}
 
 full translated text:
- all the xaciety, chacg, beaety oq liqe is gade ep liiht and shadow. 
- day that had been cleac bciiht beian to cloed oxec; dcops cain qall. 
- one by one, those acoend soeiht sheltec, bet thece was a yind heiet peace in sedden chanie. 
- sogethini calgini acceptance what coges, cesiination eneopected, qills heact with new awaceness. 
- gind, too, liye wocld oetside, shiqts chanies, adaptini weathec thoeihts qeelinis. 
- it these gogents tcansqocgation qeels gost alixe, awace depths gystecies within.
+ full translated text:
+ all the xaciety, all the chacg, all the beaety oq liqe is gade ep oq liiht and shadow. 
+ the day that had been cleac and bciiht beian to cloed oxec; dcops oq cain beian to qall. 
+ one by one, those acoend soeiht sheltec, bet thece was a yind oq heiet and peace in the sedden chanie. 
+ thece is sogethini calgini in the acceptance oq what coges, a cesiination to the eneopected, that 
+ qills the heact with a new yind oq awaceness. the gind, too, liye the wocld oetside, shiqts and chanies, 
+ adaptini to the new weathec oq thoeihts and qeelinis. it is in these gogents oq tcansqocgation that one 
+ qeels gost alixe, gost awace oq the depths and gystecies within.
 
 My observations: I have resolved almost all the three better words.
 
@@ -192,17 +198,17 @@ Translated double letter words:
  {'bpp': 'all', 'rffv': 'been', 'qbpp': 'fall', 'tellfv': 'sudden', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'fills', 'bubcfvftt': 'awaceness', 'sjj': 'too', 'qffpdvit': 'feelinis', 'qffpt': 'feels'}
 
 full translated text:
- all the xaciety, chacm, beauty of life is made up liiht and shadow. 
- day that had been cleac bciiht beian to cloud oxec; dcops cain fall. 
- one by one, those acound souiht sheltec, but thece was a yind huiet peace in sudden chanie. 
- somethini calmini acceptance what comes, cesiination uneopected, fills heact with new awaceness. 
- mind, too, liye wocld outside, shifts chanies, adaptini weathec thouihts feelinis. 
- it these moments tcansfocmation feels most alixe, awace depths mystecies within.
+ full translated text:
+ all the xaciety, all the chacm, all the beauty of life is made up of liiht and shadow. 
+ the day that had been cleac and bciiht beian to cloud oxec; dcops of cain beian to fall. 
+ one by one, those acound souiht sheltec, but thece was a yind of huiet and peace in the sudden chanie. 
+ thece is somethini calmini in the acceptance of what comes, a cesiination to the uneopected, 
+ that fills the heact with a new yind of awaceness. the mind, too, liye the wocld outside, shifts and 
+ chanies, adaptini to the new weathec of thouihts and feelinis. it is in these moments of tcansfocmation 
+ that one feels most alixe, most awace of the depths and mystecies within. 
 
-My observations: 
 
-
-Process execution round :
+Process execution round 5:
 1. Map "c"->"r" to resolve "tcansfocmation" to "transformation" and "chacm" to "charm"
 Map "i"->"g" to resolve "liiht" to "light" and "calmini" to "calming"
 Map "x"->"v" to resolve "alixe" to "alive" and "xaciety" to "variety" 
@@ -223,21 +229,22 @@ Translated double letter words:
  {'bpp': 'all', 'rffv': 'been', 'qbpp': 'fall', 'tellfv': 'sudden', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'fills', 'bubcfvftt': 'awareness', 'sjj': 'too', 'qffpdvit': 'feelings', 'qffpt': 'feels'}
 
 full translated text:
- all the variety, charm, beauty of life is made up light and shadow. 
- day that had been clear bright began to cloud over; drops rain fall. 
- one by one, those around sought shelter, but there was a yind huiet peace in sudden change. 
- something calming acceptance what comes, resignation uneopected, fills heart with new awareness. 
- mind, too, liye world outside, shifts changes, adapting weather thoughts feelings. 
- it these moments transformation feels most alive, aware depths mysteries within.
+ all the variety, all the charm, all the beauty of life is made up of light and shadow. 
+ the day that had been clear and bright began to cloud over; drops of rain began to fall. 
+ one by one, those around sought shelter, but there was a yind of huiet and peace in the sudden change. 
+ there is something calming in the acceptance of what comes, a resignation to the uneopected, that 
+ fills the heart with a new yind of awareness. the mind, too, liye the world outside, shifts and changes, 
+ adapting to the new weather of thoughts and feelings. it is in these moments of transformation that one 
+ feels most alive, most aware of the depths and mysteries within. 
 
 
 Process execution round 5:
-1. Map "y"->"f" to resolve "yind" to "find"
+1. Map "y"->"k" to resolve "yind" to "find"
 Map "h"->"q" to resolve "huiet" to "quiet"
 Map "o"->"x" to resolve "uneopected" to "unexpected"
 
 The mapping for this execution: 
-currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s", "w":"c", "n":"p", "u":"w", "r":"b", "k":"y", "e":"u", "g":"m", "q":"f", "c":"r", "i":"g", "x":"v", "y":"f", "h":"q", "o":"x"}
+currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s", "w":"c", "n":"p", "u":"w", "r":"b", "k":"y", "e":"u", "g":"m", "q":"f", "c":"r", "i":"g", "x":"v", "y":"k", "h":"q", "o":"x"}
 
 2. Update the dictionaries with the new mapping: 
 
@@ -248,22 +255,19 @@ Translated two letter words:
 Translated three letter words:
  {'smf': 'the', 'bvl': 'and', 'bpp': 'all', 'jvf': 'one', 'vfu': 'new', 'lbk': 'day', 'mbl': 'had', 'res': 'but', 'ubt': 'was', 'sjj': 'too'}
 Translated four letter words:
- {'smbs': 'that', 'ydvl': 'find', 'gjts': 'most', 'pdqf': 'life', 'gblf': 'made', 'rffv': 'been', 'jxfc': 'over', 'cbdv': 'rain', 'qbpp': 'fall', 'umbs': 'what', 'udsm': 'with', 'gdvl': 'mind', 'pdyf': 'life'}
+ {'smbs': 'that', 'ydvl': 'kind', 'gjts': 'most', 'pdqf': 'life', 'gblf': 'made', 'rffv': 'been', 'jxfc': 'over', 'cbdv': 'rain', 'qbpp': 'fall', 'umbs': 'what', 'udsm': 'with', 'gdvl': 'mind', 'pdyf': 'like'}
 Translated double letter words:
  {'bpp': 'all', 'rffv': 'been', 'qbpp': 'fall', 'tellfv': 'sudden', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'fills', 'bubcfvftt': 'awareness', 'sjj': 'too', 'qffpdvit': 'feelings', 'qffpt': 'feels'}
 
 full translated text:
- all the variety, charm, beauty of life is made up light and shadow. 
- day that had been clear bright began to cloud over; drops rain fall. 
- one by one, those around sought shelter, but there was a find quiet peace in sudden change. 
- something calming acceptance what comes, resignation unexpected, fills heart with new awareness. 
- mind, too, life world outside, shifts changes, adapting weather thoughts feelings. 
- it these moments transformation feels most alive, aware depths mysteries within.
+ all the variety, all the charm, all the beauty of life is made up of light and shadow. 
+ the day that had been clear and bright began to cloud over; drops of rain began to fall. 
+ one by one, those around sought shelter, but there was a kind of quiet and peace in the sudden change. 
+ there is something calming in the acceptance of what comes, a resignation to the unexpected, that fills 
+ the heart with a new kind of awareness. the mind, too, like the world outside, shifts and changes, 
+ adapting to the new weather of thoughts and feelings. it is in these moments of transformation that one 
+ feels most alive, most aware of the depths and mysteries within. 
 
-My observations: there are a few words that don't make sense in context with my current mapping;
-"life world outside" sounds like it should be "like world outside" and "find quiet peace" sounds 
-like it should be "kind quiet peace". So the mapping is not one to one, and the letter "q" probably
-maps to both "f" and "k". 
-I resolved this by individually changing these incorrect mappings after the currentMapping was done.
+My observations: encrypted text is fully translated into plaintext.
 
 

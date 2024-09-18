@@ -159,8 +159,7 @@ if __name__ == '__main__':
     # after looking at the results of the print statements, I chose my first mapping.
     # current mapping holds the mapping that I'm testing out. In the beginning of working on this file,
     # currentMapping contained only a few mappings based on findings for each round.
-    currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s", "w":"c", "n":"p", "u":"w", "r":"b", "k":"y", "e":"u", "g":"m", "q":"f", "c":"r", "i":"g", "x":"v", "y":"f", "h":"q", "o":"x"}
-    
+    currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s", "w":"c", "n":"p", "u":"w", "r":"b", "k":"y", "e":"u", "g":"m", "q":"f", "c":"r", "i":"g", "x":"v", "y":"k", "h":"q", "o":"x"}
     # set letter mapping for one letter words 
     oneLetterWords = translateOneLetterWords(currentMapping, oneLetterWords)
 
@@ -190,15 +189,8 @@ if __name__ == '__main__':
     mostCommonLetters = [[key, letterCounts[key]] for key in letterCounts.keys() if letterCounts[key] > 20]
     mostCommonLetters.sort(key = lambda item:item[1], reverse = True)
 
-    # individually change the incorrect "q"->"f" mappings to "k"
-    for index in range(len(fullTranslation)):
-        lifeCount = 0
-        if fullTranslation[index] == "find":
-            fullTranslation[index] = "kind"
-        if fullTranslation[index] == "life" and lifeCount == 0:
-            lifeCount += 1
-        elif fullTranslation[index] == "life" and lifeCount == 1:
-            fullTranslation[index] = "like"
+
+    fullTranslation.append("\n")
 
     
     # now I print these dicts and see if I can sense any pattern or success emerging
@@ -210,7 +202,7 @@ if __name__ == '__main__':
     # print("Translated four letter words:\n", fourLetterWords)
     # print("Translated double letter words:\n", doubleLetterWords)
     # print()
-    # print("full translated text:\n", " ".join(list(fullTranslation.values())))
+    # print("full translated text:\n", " ".join(fullTranslation))
     # print("Letters ordered by decreasing frequency: ", letterCounts.keys())
 
     # I have found the full translation of the ciphertext. write it into a file for submission. 
