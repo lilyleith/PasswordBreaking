@@ -1,0 +1,265 @@
+I started by compiling some information about the encrypted text.
+
+I stored the following information:
+- unique words that have a double letter - stored in dict doubleLetterWords
+- one letter words - stored in dict oneLetterWords
+- unique two letter words, ordered by their frequency - stored in dict twoLetterWords
+- unique three letter words, ordered by their frequency - stored in dict threeLetterWords
+- unique four letter words, ordered by their frequency - stored in dict fourLetterWords 
+- a list of unique letters (excluding punctuation) in order of their frequency in the encrypted file
+
+These are the results of this initial word inventory:
+
+One letter words:  ['b']
+Two letter words:  ['jq', 'sj', 'dt', 'dv', 'en', 'rk', 'ds']
+Three letter words:  ['smf', 'bvl', 'bpp', 'jvf', 'vfu', 'lbk', 'mbl', 'res', 'ubt', 'sjj']
+Four letter words:  ['smbs', 'ydvl', 'gjts', 'pdqf', 'gblf', 'rffv', 'jxfc', 'cbdv', 'qbpp', 'umbs', 'udsm', 'gdvl', 'pdyf']
+Double letter words:  ['smbs', 'ydvl', 'gjts', 'pdqf', 'gblf', 'rffv', 'jxfc', 'cbdv', 'qbpp', 'umbs', 'udsm', 'gdvl', 'pdyf']
+
+List of letters by descending frequency:
+f, s, b, m, v, j, d, t, l, p, c, q, i, w, g, e, u, r, n, k, x, y, h, o
+
+From https://www3.nd.edu/~busiforc/handouts/cryptography/Letter%20Frequencies.html, I found a list 
+of English letters in descending frequency:
+e, t, a, o, i, n, s, h, r, d, l, c, u, m, w, f, g, y, p, b, v, k, j, x, q, z
+
+From https://www3.nd.edu/~busiforc/handouts/cryptography/cryptography%20hints.html, I found a list 
+of the most common two letter words:
+of, to, in, it, is, be, as, at, so, we, he, by, or, on, do, if, me, my, up, an, go, no, us, am
+
+From the same source, I found a list of 
+the most common three letter words:
+the, and, for, are, but, not, you, all, any, can, had, her, was, one, our, out, day, get, has, 
+him, his, how, man, new, now, old, see, two, way, who, boy, did, its, let, put, say, she, too, use
+
+From the same source, the most common four letter words:
+that, with, have, this, will, your, from, they, know, want, been, good, much, some, time
+
+MAPPING PROCESS:
+First, I started by assigning the mapping of the only one letter word in the text, "b"->"a". This mapping 
+seemed like the best fit because the frequency of the letter "b" in the text was sequentially the same as 
+"a"'s place in the English letter frequency list.
+Following the same logic, I mapped "f"->"e" and "s"->"t". I didn't map any more because I wanted to see 
+how things looked after just three mappings. 
+
+So my first mapping was:
+currentMapping = {"b":"a", "f":"e", "s":"t"}
+
+The results were: 
+Translated one letter words:
+ {'b': 'a'}
+Translated two letter words:
+ {'jq': 'jq', 'sj': 'tj', 'dt': 'dt', 'dv': 'dv', 'en': 'en', 'rk': 'rk', 'ds': 'dt'}
+Translated three letter words:
+ {'smf': 'tme', 'bvl': 'avl', 'bpp': 'app', 'jvf': 'jve', 'vfu': 'veu', 'lbk': 'lak', 'mbl': 'mal', 'res': 'ret', 'ubt': 'uat', 'sjj': 'tjj'}
+Translated four letter words:
+ {'smbs': 'tmat', 'ydvl': 'ydvl', 'gjts': 'gjtt', 'pdqf': 'pdqe', 'gblf': 'gale', 'rffv': 'reev', 'jxfc': 'jxec', 'cbdv': 'cadv', 'qbpp': 'qapp', 'umbs': 'umat', 'udsm': 'udtm', 'gdvl': 'gdvl', 'pdyf': 'pdye'}
+Translated double letter words:
+ {'bpp': 'app', 'rffv': 'reev', 'qbpp': 'qapp', 'tellfv': 'tellev', 'bwwfnsbvwf': 'awwentavwe', 'qdppt': 'qdppt', 'bubcfvftt': 'auacevett', 'sjj': 'tjj', 'qffpdvit': 'qeepdvit', 'qffpt': 'qeept'}
+
+full translated text:
+ app tme xacdetk, wmacg, reaetk jq pdqe dt gale en pdimt avl tmalju. 
+ lak tmat mal reev wpeac rcdimt reiav tj wpjel jxec; lcjnt cadv qapp. 
+ jve rk jve, tmjte acjevl tjeimt tmeptec, ret tmece uat a ydvl hedet neawe dv tellev wmavie. 
+ tjgetmdvi wapgdvi awwentavwe umat wjget, cetdivatdjv eveonewtel, qdppt meact udtm veu auacevett. 
+ gdvl, tjj, pdye ujcpl jettdle, tmdqtt wmaviet, alantdvi ueatmec tmjeimtt qeepdvit. 
+ dt tmete gjgevtt tcavtqjcgatdjv qeept gjtt apdxe, auace lentmt gkttecdet udtmdv.
+
+
+
+After this initial mapping, I followed this general process for each round of testing:
+1. choose some mappings based on the information from the two, three, four and double letter words, and 
+possibly choose some additional mappings that follow from these words.
+2. compare this mapping to what we would get for the two, three, four, double letter words and the full 
+text
+3. repeat process
+
+Process execution round 1:
+1. Map "j"->"o" based on their similar frequencies and to make sense of the double letter word "sjj" to "too", 
+as well as the two letter word "sj" to "to".
+Map "m"->"h" based on the partially translated "smf"->"tme" and "smbs"->"tmat"  that I can resolve as "the" 
+and "that", respectively. 
+Map "p"->"l" based on their similar frequency, and the likelihood that the partial "bpp"->"app" can be resolved
+as "all".
+
+The mapping for this execution: 
+currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l"}
+2. Update the dictionaries with the new mapping: 
+
+Translated one letter words:
+ {'b': 'a'}
+Translated two letter words:
+ {'jq': 'oq', 'sj': 'to', 'dt': 'dt', 'dv': 'dv', 'en': 'en', 'rk': 'rk', 'ds': 'dt'}
+Translated three letter words:
+ {'smf': 'the', 'bvl': 'avl', 'bpp': 'all', 'jvf': 'ove', 'vfu': 'veu', 'lbk': 'lak', 'mbl': 'hal', 'res': 'ret', 'ubt': 'uat', 'sjj': 'too'}
+Translated four letter words:
+ {'smbs': 'that', 'ydvl': 'ydvl', 'gjts': 'gott', 'pdqf': 'ldqe', 'gblf': 'gale', 'rffv': 'reev', 'jxfc': 'oxec', 'cbdv': 'cadv', 'qbpp': 'qall', 'umbs': 'uhat', 'udsm': 'udth', 'gdvl': 'gdvl', 'pdyf': 'ldye'}
+Translated double letter words:
+ {'bpp': 'all', 'rffv': 'reev', 'qbpp': 'qall', 'tellfv': 'tellev', 'bwwfnsbvwf': 'awwentavwe', 'qdppt': 'qdllt', 'bubcfvftt': 'auacevett', 'sjj': 'too', 'qffpdvit': 'qeeldvit', 'qffpt': 'qeelt'}
+
+full translated text:
+ all the xacdetk, whacg, reaetk oq ldqe dt gale en ldiht avl thalou. 
+ lak that hal reev wleac rcdiht reiav to wloel oxec; lcont cadv qall. 
+ ove rk ove, thote acoevl toeiht theltec, ret thece uat a ydvl hedet neawe dv tellev whavie. 
+ togethdvi walgdvi awwentavwe uhat woget, cetdivatdov eveonewtel, qdllt heact udth veu auacevett. 
+ gdvl, too, ldye uocll oettdle, thdqtt whaviet, alantdvi ueathec thoeihtt qeeldvit. 
+ dt thete gogevtt tcavtqocgatdov qeelt gott aldxe, auace lentht gkttecdet udthdv.
+ 
+
+Process execution round 2:
+1. Map "v"->"n" and "l"->"d" based on their frequency similarities and these mappings' abilities to 
+resolve "bvl" as "and" and "jvf" as "one".
+Map "d"->"i" based on their similar frequencies and ability to resolve two letter words "in" and "it".
+Additionally map "t"->"s" to resolve "is".
+
+The mapping for this execution: 
+currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s"}
+2. Update the dictionaries with the new mapping: 
+
+Translated one letter words:
+ {'b': 'a'}
+Translated two letter words:
+ {'jq': 'oq', 'sj': 'to', 'dt': 'is', 'dv': 'in', 'en': 'en', 'rk': 'rk', 'ds': 'it'}
+Translated three letter words:
+ {'smf': 'the', 'bvl': 'and', 'bpp': 'all', 'jvf': 'one', 'vfu': 'neu', 'lbk': 'dak', 'mbl': 'had', 'res': 'ret', 'ubt': 'uas', 'sjj': 'too'}
+Translated four letter words:
+ {'smbs': 'that', 'ydvl': 'yind', 'gjts': 'gost', 'pdqf': 'liqe', 'gblf': 'gade', 'rffv': 'reen', 'jxfc': 'oxec', 'cbdv': 'cain', 'qbpp': 'qall', 'umbs': 'uhat', 'udsm': 'uith', 'gdvl': 'gind', 'pdyf': 'liye'}
+Translated double letter words:
+ {'bpp': 'all', 'rffv': 'reen', 'qbpp': 'qall', 'tellfv': 'sedden', 'bwwfnsbvwf': 'awwentanwe', 'qdppt': 'qills', 'bubcfvftt': 'auaceness', 'sjj': 'too', 'qffpdvit': 'qeelinis', 'qffpt': 'qeels'}
+
+full translated text:
+ all the xacietk, whacg, reaetk oq liqe is gade en liiht and shadou. 
+ dak that had reen wleac rciiht reian to wloed oxec; dcons cain qall. 
+ one rk one, those acoend soeiht sheltec, ret thece uas a yind heiet neawe in sedden whanie. 
+ sogethini walgini awwentanwe uhat woges, cesiination eneonewted, qills heact uith neu auaceness. 
+ gind, too, liye uocld oetside, shiqts whanies, adantini ueathec thoeihts qeelinis. 
+ it these gogents tcansqocgation qeels gost alixe, auace denths gkstecies uithin.
+
+
+My observations: It seems like there are some words that I can directly resolve from the partial translation 
+of the full text,such as resolving "shadou" to "shadow" and "uithin" to "within".
+
+Process execution round 3:
+1. Map "w"->"c" and "n"->"p" based on their sort-of similar frequencies and to resolve the double letter word 'bwwfnsbvwf' to 
+'acceptance'
+Map "u"->"w" to resolve partial translations "uithin" and "shadou" to "within" and "shadow", resp.
+I notice that both "r" and "k" have relatively low frequencies. Additionally, the word "rk" appears in between 
+the words "one" and "one". So I map "r"->"b" and "k"->"y" to make "by".
+
+The mapping for this execution: 
+currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s", "w":"c", "n":"p", "u":"w", "r":"b", "k":"y"}
+
+2. Update the dictionaries with the new mapping: 
+Translated one letter words:
+ {'b': 'a'}
+Translated two letter words:
+ {'jq': 'oq', 'sj': 'to', 'dt': 'is', 'dv': 'in', 'en': 'ep', 'rk': 'by', 'ds': 'it'}
+Translated three letter words:
+ {'smf': 'the', 'bvl': 'and', 'bpp': 'all', 'jvf': 'one', 'vfu': 'new', 'lbk': 'day', 'mbl': 'had', 'res': 'bet', 'ubt': 'was', 'sjj': 'too'}
+Translated four letter words:
+ {'smbs': 'that', 'ydvl': 'yind', 'gjts': 'gost', 'pdqf': 'liqe', 'gblf': 'gade', 'rffv': 'been', 'jxfc': 'oxec', 'cbdv': 'cain', 'qbpp': 'qall', 'umbs': 'what', 'udsm': 'with', 'gdvl': 'gind', 'pdyf': 'liye'}
+Translated double letter words:
+ {'bpp': 'all', 'rffv': 'been', 'qbpp': 'qall', 'tellfv': 'sedden', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'qills', 'bubcfvftt': 'awaceness', 'sjj': 'too', 'qffpdvit': 'qeelinis', 'qffpt': 'qeels'}
+
+full translated text:
+ all the xaciety, chacg, beaety oq liqe is gade ep liiht and shadow. 
+ day that had been cleac bciiht beian to cloed oxec; dcops cain qall. 
+ one by one, those acoend soeiht sheltec, bet thece was a yind heiet peace in sedden chanie. 
+ sogethini calgini acceptance what coges, cesiination eneopected, qills heact with new awaceness. 
+ gind, too, liye wocld oetside, shiqts chanies, adaptini weathec thoeihts qeelinis. 
+ it these gogents tcansqocgation qeels gost alixe, awace depths gystecies within.
+
+My observations: I have resolved almost all the three better words.
+
+Process execution round 4:
+1. Map "e"->"u" to resolve "en" and "res" to "up" and "bet" and "up", resp.
+Map "q"->"f" to resolve partial translation "oq" to "of" and "qeels" to "feels"
+Map "g"->"m" to resolve "gost" to "most"
+
+The mapping for this execution: 
+currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s", "w":"c", "n":"p", "u":"w", "r":"b", "k":"y", "e":"u", "g":"m", "q":"f"}
+
+2. Update the dictionaries with the new mapping: 
+Translated one letter words:
+ {'b': 'a'}
+Translated two letter words:
+ {'jq': 'of', 'sj': 'to', 'dt': 'is', 'dv': 'in', 'en': 'up', 'rk': 'by', 'ds': 'it'}
+Translated three letter words:
+ {'smf': 'the', 'bvl': 'and', 'bpp': 'all', 'jvf': 'one', 'vfu': 'new', 'lbk': 'day', 'mbl': 'had', 'res': 'but', 'ubt': 'was', 'sjj': 'too'}
+Translated four letter words:
+ {'smbs': 'that', 'ydvl': 'yind', 'gjts': 'most', 'pdqf': 'life', 'gblf': 'made', 'rffv': 'been', 'jxfc': 'oxec', 'cbdv': 'cain', 'qbpp': 'fall', 'umbs': 'what', 'udsm': 'with', 'gdvl': 'mind', 'pdyf': 'liye'}
+Translated double letter words:
+ {'bpp': 'all', 'rffv': 'been', 'qbpp': 'fall', 'tellfv': 'sudden', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'fills', 'bubcfvftt': 'awaceness', 'sjj': 'too', 'qffpdvit': 'feelinis', 'qffpt': 'feels'}
+
+full translated text:
+ all the xaciety, chacm, beauty of life is made up liiht and shadow. 
+ day that had been cleac bciiht beian to cloud oxec; dcops cain fall. 
+ one by one, those acound souiht sheltec, but thece was a yind huiet peace in sudden chanie. 
+ somethini calmini acceptance what comes, cesiination uneopected, fills heact with new awaceness. 
+ mind, too, liye wocld outside, shifts chanies, adaptini weathec thouihts feelinis. 
+ it these moments tcansfocmation feels most alixe, awace depths mystecies within.
+
+My observations: 
+
+
+Process execution round :
+1. Map "c"->"r" to resolve "tcansfocmation" to "transformation" and "chacm" to "charm"
+Map "i"->"g" to resolve "liiht" to "light" and "calmini" to "calming"
+Map "x"->"v" to resolve "alixe" to "alive" and "xaciety" to "variety" 
+
+The mapping for this execution: 
+currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s", "w":"c", "n":"p", "u":"w", "r":"b", "k":"y", "e":"u", "g":"m", "q":"f", "c":"r", "i":"g", "x":"v"}
+
+2. Update the dictionaries with the new mapping: 
+Translated one letter words:
+ {'b': 'a'}
+Translated two letter words:
+ {'jq': 'of', 'sj': 'to', 'dt': 'is', 'dv': 'in', 'en': 'up', 'rk': 'by', 'ds': 'it'}
+Translated three letter words:
+ {'smf': 'the', 'bvl': 'and', 'bpp': 'all', 'jvf': 'one', 'vfu': 'new', 'lbk': 'day', 'mbl': 'had', 'res': 'but', 'ubt': 'was', 'sjj': 'too'}
+Translated four letter words:
+ {'smbs': 'that', 'ydvl': 'yind', 'gjts': 'most', 'pdqf': 'life', 'gblf': 'made', 'rffv': 'been', 'jxfc': 'over', 'cbdv': 'rain', 'qbpp': 'fall', 'umbs': 'what', 'udsm': 'with', 'gdvl': 'mind', 'pdyf': 'liye'}
+Translated double letter words:
+ {'bpp': 'all', 'rffv': 'been', 'qbpp': 'fall', 'tellfv': 'sudden', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'fills', 'bubcfvftt': 'awareness', 'sjj': 'too', 'qffpdvit': 'feelings', 'qffpt': 'feels'}
+
+full translated text:
+ all the variety, charm, beauty of life is made up light and shadow. 
+ day that had been clear bright began to cloud over; drops rain fall. 
+ one by one, those around sought shelter, but there was a yind huiet peace in sudden change. 
+ something calming acceptance what comes, resignation uneopected, fills heart with new awareness. 
+ mind, too, liye world outside, shifts changes, adapting weather thoughts feelings. 
+ it these moments transformation feels most alive, aware depths mysteries within.
+
+
+Process execution round 5:
+1. Map "y"->"f" to resolve "yind" to "find"
+Map "h"->"q" to resolve "huiet" to "quiet"
+Map "o"->"x" to resolve "uneopected" to "unexpected"
+
+The mapping for this execution: 
+currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s", "w":"c", "n":"p", "u":"w", "r":"b", "k":"y", "e":"u", "g":"m", "q":"f", "c":"r", "i":"g", "x":"v", "y":"f", "h":"q", "o":"x"}
+
+2. Update the dictionaries with the new mapping: 
+
+Translated one letter words:
+ {'b': 'a'}
+Translated two letter words:
+ {'jq': 'of', 'sj': 'to', 'dt': 'is', 'dv': 'in', 'en': 'up', 'rk': 'by', 'ds': 'it'}
+Translated three letter words:
+ {'smf': 'the', 'bvl': 'and', 'bpp': 'all', 'jvf': 'one', 'vfu': 'new', 'lbk': 'day', 'mbl': 'had', 'res': 'but', 'ubt': 'was', 'sjj': 'too'}
+Translated four letter words:
+ {'smbs': 'that', 'ydvl': 'find', 'gjts': 'most', 'pdqf': 'life', 'gblf': 'made', 'rffv': 'been', 'jxfc': 'over', 'cbdv': 'rain', 'qbpp': 'fall', 'umbs': 'what', 'udsm': 'with', 'gdvl': 'mind', 'pdyf': 'life'}
+Translated double letter words:
+ {'bpp': 'all', 'rffv': 'been', 'qbpp': 'fall', 'tellfv': 'sudden', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'fills', 'bubcfvftt': 'awareness', 'sjj': 'too', 'qffpdvit': 'feelings', 'qffpt': 'feels'}
+
+full translated text:
+ all the variety, charm, beauty of life is made up light and shadow. 
+ day that had been clear bright began to cloud over; drops rain fall. 
+ one by one, those around sought shelter, but there was a find quiet peace in sudden change. 
+ something calming acceptance what comes, resignation unexpected, fills heart with new awareness. 
+ mind, too, life world outside, shifts changes, adapting weather thoughts feelings. 
+ it these moments transformation feels most alive, aware depths mysteries within.
+
+My observations: ciphertext is fully translated to plaintext
+
+

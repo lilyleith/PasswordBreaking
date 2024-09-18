@@ -2,114 +2,190 @@ import hashlib
 import time
 import numpy as np
 
+# create functions for decrypting
+# reference all sources used for readme
 
-# first we have a frequency table of letters in the alphabet from https://www3.nd.edu/~busiforc/handouts/cryptography/letterfrequencies.html
-azFrequencies = {"a":0.084966, "b":0.020720, "c": 0.045388, "d":0.033844, "e":0.111607, "f":0.018121, "g": 0.024705, "h": 0.030034, "i": 0.075448, "j": 0.001965, "k": 0.011016, "l":0.054893, "m": 0.030129, "n":0.066544, "o":0.071635, "p": 0.031671, "q":0.001962, "r":0.075809, "s":0.057351, "t":0.069509, "u":0.036308, "v":0.010074, "w":0.012899, "x":0.002902, "y": 0.017779, "z":0.002722}
-
-azCounts = {}
-totalLetters = 0
-words = list()
-with open("encrypted.txt", "r") as encrypted:
-    for line in encrypted:
-        words = line.split(" ")
-        for word in words:
-            for letter in word:
-                if letter in azFrequencies.keys():
-                    totalLetters += 1
-                    if letter not in azCounts:
-                        azCounts[letter] = 1
-                    else:
-                        azCounts[letter] += 1
-                else:
-                    continue
-#print(words)
-observedFrequencies = {}
-for letter in azCounts:
-    observedFrequencies[letter] = azCounts[letter] / totalLetters
-observedFrequencies = dict(sorted(observedFrequencies.items(), key= lambda item: item[1], reverse = True))
-
-closestFrequencies = {}
-
-# for letter,frequency in observedFrequencies.items():
-#     print(letter,frequency)
-
-# for letter,frequency in azFrequencies.items():
-#     print(letter,frequency)
-for letter,frequency in observedFrequencies.items():
-    diff0 = 1000
-    closest = ""
-    for az,azFreq in azFrequencies.items():
-        diff1 = abs(frequency - azFreq)
-        if diff1 < diff0:
-            diff0 = diff1
-            
-            closest = az
-            
-
-    closestFrequencies[letter] = closest
-# for key, value in closestFrequencies.items():   
-#     print(key, value)
-
-newWordList = list()
-for word in words:
-    newWord = word
-    for letter,subLetter in closestFrequencies.items():
-        newWord = newWord.replace(letter, subLetter)
-    newWordList.append(newWord)
-
-for word in newWordList:
-    print(word)
-
-commonTwoLetterWords = ["of","to","in","it","is","be","as","at","so","we","he","by","or","on","do","if","me","my","up","an","go","no","us","am"]
-realFreqsOfTLW = {}
-totalLettersInTLW = 0
-for word in commonTwoLetterWords:
-    for letter in word:
-        totalLettersInTLW += 1
-        if letter not in realFreqsOfTLW:
-            realFreqsOfTLW[letter] = 1
+# this function returns 1 if there is a double letter combination in a word, and 0 if there is not
+def doubleLetter(word):
+    currLetter = ""
+    for index in range(1, len(word)):
+        if word[index - 1] == word[index]:
+            return 1
         else:
-            realFreqsOfTLW[letter] += 1
-for letter, count in realFreqsOfTLW.items():
-    realFreqsOfTLW[letter] = count/totalLettersInTLW
-realFreqsOfTLW = dict(sorted(realFreqsOfTLW.items(),key= lambda item: item[1], reverse=True))
-print(realFreqsOfTLW)
-observedTwoLetterWords = [word for word in words if len(word) == 2]
+            continue
+    return 0
 
+# translate the one letter words using the current mapping
+def translateOneLetterWords(currentMapping, oneLetterWords):
+    # can directly key in because there is only one unique one letter word "b"
+    oneLetterWords["b"] = currentMapping["b"]
+    return oneLetterWords
 
-observedFreqsOfTLW = {}
-totalLettersInTLW = 0
-for word in observedTwoLetterWords:
-    for letter in word:
-            totalLettersInTLW += 1
-            if letter not in observedFreqsOfTLW:
-                observedFreqsOfTLW[letter] = 1
+# translate the wordList using currentMapping 
+def translateWordList(currentMapping, wordList):
+    
+    for encryptedWord in wordList.keys():
+        # split the word into a list so that we can translate each letter independently
+        # stops us from updating already translated letters to incorrect mappings
+        letterList = [letter for letter in encryptedWord]
+        index = 0
+        # iterate through each letter
+        for letter in letterList:
+            # if the letter defined in the mapping, then replace it with its mapping
+            
+            if letter in currentMapping.keys():
+                
+                letterList[index] = currentMapping[letter]
+            # update the index
+            index += 1
+        
+        # store translation in the wordList dictionary
+        wordList[encryptedWord] = "".join(letterList)
+    # return the wordList
+    return wordList
+
+# create and return a dict with keys that are unique words of len length from the encrypted text and the
+# values are empty strings
+def createWordListByLength(encryptedWords, length):
+    # create dict
+    wordList = {}
+    for word in encryptedWords:
+        if len(word) == length:
+            # we will start by making the values in the dict the frequency of the word so that we can order 
+            # the list. Later we change the values to translations in another function.
+            if word not in wordList:
+                wordList[word] = 1
             else:
-                observedFreqsOfTLW[letter] += 1
-for letter, count in observedFreqsOfTLW.items():
-    observedFreqsOfTLW[letter] = count/totalLettersInTLW
-observedFreqsOfTLW = dict(sorted(observedFreqsOfTLW.items(), key= lambda item: item[1], reverse=True))
+                wordList[word] +=1
+    wordList = dict(sorted(wordList.items(), key = lambda item:item[1], reverse = True))
+    return wordList
+            
+            
 
-print(observedFreqsOfTLW)
-print(commonTwoLetterWords)
-print(observedTwoLetterWords)
+# return a dictionary mapping each letter to the number of times it appears in the encrypted text
+def countLetters(encryptedWords):
+    # create letterCounts dictionary
+    letterCounts = {}
+    # iterate through each word
+    for word in encryptedWords:
+        # iterate through each letter in the word
+        for letter in word:
+            # if not in the dictionary, then initiate value to 1
+            if letter not in letterCounts:
+                letterCounts[letter] = 1
+            # if in the dict, increment the value by 1
+            else:
+                letterCounts[letter] += 1
+    # order the letters in ascending order of frequency and return as a list of tuples
+    letterCounts = dict(sorted(letterCounts.items(), key = lambda item:item[1], reverse = True))
+    return letterCounts
 
-testTLW = [tlw for tlw in observedTwoLetterWords]
-for index in range(len(testTLW)):
-    testTLW[index] = testTLW[index].replace("j", "o")
-    testTLW[index] = testTLW[index].replace("q", "f")
-    testTLW[index] = testTLW[index].replace("d", "i")
-    testTLW[index] = testTLW[index].replace("t", "n")
-    testTLW[index] = testTLW[index].replace("n", "t")
-    testTLW[index] = testTLW[index].replace("e", "a")
+
+if __name__ == '__main__':
+    # these dicts will hold the encrypted text words as the key, and the value will be the unencrypted word
+    # based on the current mapping that I'm testing
+    doubleLetterWords = {}
+    oneLetterWords = {}
+    twoLetterWords = {}
+
+    # these lists hold the encrypted words that have double letters, just a single letter, or just two letters.
+    # I made these in addition to the dictionaries for ease of printing in my first analysis of the text
+    doubleLetterWordsList = []
+    oneLetterWordsList = []
+    twoLetterWordsList = []
+
+    # a list of the encrypted words in the encryption.txt file stripped of punctuation
+    encrytedWords = []
+
+    # a dictionary mapping each encrypted word in the file to its translation, including punctuation for context
+    fullTranslation = {}
+
+
+    # first step in the process was getting a list of all the words stripped of punctuation 
+    with open("encrypted.txt") as encrypted:
+        line = encrypted.readline()
+        # add the word with punctuation to the fullTranslation dictionary
+        # remove periods, semicolons, apostrophes and commas from each word and store in encrypted word list
+        for word in line.split(" "):
+            fullTranslation[word] = ""
+            word = word.replace(",","")
+            word = word.replace(".","")
+            word = word.replace("'","")
+            word = word.replace(";","")
+            encrytedWords.append(word)
     
+    # took inventory of all the one letter words, two letter words, three letter words, and four letter words
+    
+    oneLetterWords = createWordListByLength(encrytedWords, 1)
+    twoLetterWords = createWordListByLength(encrytedWords, 2)
+    threeLetterWords = createWordListByLength(encrytedWords, 3)
+    fourLetterWords = createWordListByLength(encrytedWords, 4)
 
+    # created dict of all the double letter words: 
+    doubleLetterWords = {}
+    for word in encrytedWords:
+        if doubleLetter(word):
+            doubleLetterWords[word] = ""
 
+    # printed out the dicts i just created. commented out for submission
 
+    # print("One letter words: ", list(oneLetterWords.keys()))
+    # print("Two letter words: ", list(twoLetterWords.keys()))
+    # print("Three letter words: ", list(threeLetterWords.keys()))
+    # print("Four letter words: ", list(fourLetterWords.keys()))
+    # print("Double letter words: ", list(fourLetterWords.keys()))
 
-print(testTLW)
+    # after looking at the results of the print statements, I chose my first mapping.
+    # current mapping holds the mapping that I'm testing out. In the beginning of working on this file,
+    # currentMapping contained only a few mappings based on findings for each round.
+    currentMapping = {"b":"a", "f":"e", "s":"t", "j":"o", "m":"h", "p":"l", "v":"n", "l":"d", "d":"i", "t":"s", "w":"c", "n":"p", "u":"w", "r":"b", "k":"y", "e":"u", "g":"m", "q":"f", "c":"r", "i":"g", "x":"v", "y":"f", "h":"q", "o":"x"}
+    
+    # set letter mapping for one letter words 
+    oneLetterWords = translateOneLetterWords(currentMapping, oneLetterWords)
 
+    # now I test the current mapping against the two, three, four and double letter words to find any pattern
 
+    # starting with the two letter words
+    twoLetterWords = translateWordList(currentMapping, twoLetterWords)
 
+    # and then double letter words
+    doubleLetterWords = translateWordList(currentMapping, doubleLetterWords)
+
+    # three letter words
+    threeLetterWords = translateWordList(currentMapping, threeLetterWords)
+
+    # four letter words 
+    fourLetterWords = translateWordList(currentMapping, fourLetterWords)
+
+    # translate the entire file. I only started doing this in my 4th execution
+    fullTranslation = translateWordList(currentMapping, fullTranslation)
+
+    # count the instances of each letter in the encrypted text to determine which might map to 
+    # uncommon english letters
+    letterCounts = countLetters(encrytedWords)
+    mostUncommonLetters = [[key, letterCounts[key]] for key in letterCounts.keys() if letterCounts[key] < 10]
+    mostCommonLetters = [[key, letterCounts[key]] for key in letterCounts.keys() if letterCounts[key] > 20]
+    mostCommonLetters.sort(key = lambda item:item[1], reverse = True)
 
     
+    # now I print these dicts and see if I can sense any pattern or success emerging
+    # print statements are commented out for submission of analysis.py
+
+    # print("Translated one letter words:\n", oneLetterWords)
+    # print("Translated two letter words:\n", twoLetterWords)
+    # print("Translated three letter words:\n", threeLetterWords)
+    # print("Translated four letter words:\n", fourLetterWords)
+    # print("Translated double letter words:\n", doubleLetterWords)
+    # print()
+    # print("full translated text:\n", " ".join(list(fullTranslation.values())))
+    # print("Letters ordered by decreasing frequency: ", letterCounts.keys())
+
+    # I have found the full translation of the ciphertext. write it into a file for submission. 
+    plain = open("plaintext.txt", "w")
+    plaintext = " ".join(list(fullTranslation.values()))
+    plain.write(plaintext.strip(" "))
+    plain.close()
+
+
+
+

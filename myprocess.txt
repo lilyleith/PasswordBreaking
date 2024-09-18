@@ -1,0 +1,206 @@
+first noticed that the three letter word "bpp" was repeated a lot in the encrypted text, as 
+common double letters are ss, ee, tt, ff, ll, mm and oo. Based on the fact that these are three letter words,
+it made sense to me that if "pp" is an encryption of two of the same letter, then it would probably be 
+"ll" (all) or "ee" (see) or "ff" (off). I couldn't think of any three letter words that would end in "ss", "tt"
+"mm" or "oo" that would make sense. So either these were encryptions of l, e, or f, or the encryption is not al
+1-to-1 mapping.
+next i identified the only one letter words in encrypted text were "b", so this either represented "a" or "I"
+next I went through and identified all the two letter words in the encrypted text.
+
+Common two letter words: of, to, in, it, is, be, as, at, so, we, he, by, or, on, do, if, me, my, up, an, go, no, us, am
+
+
+
+Things I first identified:
+- double letters in single word - stored in dict doubleLetterWords
+- one letter words - stored in dict oneLetterWords
+- two letter words - stored in dict twoLetterWords
+
+
+These are the results of this initial word inventory (each word is represented only one time in these lists):
+one letter words:  ['b']
+two letter words:  ['jq', 'dt', 'en', 'sj', 'rk', 'dv', 'ds']
+double letter words:  ['bpp', 'rffv', 'qbpp', 'tellfv', 'bwwfnsbvwf', 'qdppt', 'bubcfvftt', 'sjj', 'qffpdvit', 'qffpt']
+
+Next I identified what letters overlap in common double letters list (ss, ee, tt, ff, ll, mm and oo) and common two words list
+(of, to, in, it, is, be, as, at, so, we, he, by, or, on, do, if, me, my, up, an, go, no, us, am)
+I did this because I noticed the overlap between the two letter word "sj" and the double letter word "sjj" 
+from the above observed data.
+
+
+process:
+1. choose a mapping for the single letter words
+2. choose some mappings for double letters
+3. choose some mappings for letters that make sense based on those chosen above.
+4. compare this mapping to what we would get for the two letter words and the double letter words and see
+if it makes sense
+5. repeat process
+
+process execution 1:
+1. I chose to map "b" to "a", because "b" can only map to one of two letters (a and I), and I felt confident
+that "a" was a better choice because of "b"'s prevelance in double letter words with "p"
+2. I chose to map "p" to "l" because then some of the double letter words, "bpp" for example, would map to 
+english word "all".
+I also chose to map the "j" to "o", because I noticed some overlap between the double letter word "sjj" and 
+"sj", which I thought might be "too" and "to".
+3. for the reason explained above, I mapped "s" to "t"
+
+So my currentMapping for this execution was:
+currentMapping = {"b":"a", "p":"l", "j":"o", "s":"t"}
+
+4. Next I updated the dictionaries with the new mapping, and listed the results:
+
+translated one letter words:  {'b': 'a'}
+translated two letter words:  {'jq': 'oq', 'dt': 'dt', 'en': 'en', 'sj': 'to', 'rk': 'rk', 'dv': 'dv', 'ds': 'dt'}
+translated double letter words:  {'bpp': 'all', 'rffv': 'rffv', 'qbpp': 'qall', 'tellfv': 'tellfv', 'bwwfnsbvwf': 'awwfntavwf', 'qdppt': 'qdllt', 'bubcfvftt': 'auacfvftt', 'sjj': 'too', 'qffpdvit': 'qffldvit', 'qffpt': 'qfflt'}
+
+My observation: I noticed that I had success with "bpp"->"all", "sjj"->"too" and "sj"->"to"
+I also noticed that there are a few double letter words "qbpp"->"qall" and "qdppt"->"qdllt"
+that share the "pp"->"ll" double letter and the unknown "q" letter.
+
+
+process execution 2:
+1. I maintained the "b"->"a" mapping.
+2. I decided to map "t"->"s" because the double letter "t" occurs at the end of the word in "bubcfvftt", which
+makes sense if it represents an "s". Additionally, "t" appears at the end of the partially translated "qdllt"
+as noted above, and the only letter that makes sense to follow a double "l" is "s".
+3. Based on this, I also decided to map "d"->"i" since the two letter words "dt" would translate to english
+word "is" with this new mapping. For a similar reason, I mapped "q"->"f" to get "jq"->"of" and "qdppt"->"fills"
+and "qbpp"->"fall"
+
+So my currentMapping for this execution was:
+currentMapping = {"b":"a", "p":"l", "j":"o", "s":"t", "t":"s", "d":"i", "q":"f"}
+
+4. Next I updated the dictionaries with the new mapping, and listed the results:
+
+translated one letter words:  {'b': 'a'}
+translated two letter words:  {'jq': 'of', 'dt': 'is', 'en': 'en', 'sj': 'to', 'rk': 'rk', 'dv': 'iv', 'ds': 'it'}
+translated double letter words:  {'bpp': 'all', 'rffv': 'rffv', 'qbpp': 'fall', 'tellfv': 'sellfv', 'bwwfnsbvwf': 'awwfntavwf', 'qdppt': 'fills', 'bubcfvftt': 'auacfvfss', 'sjj': 'too', 'qffpdvit': 'ffflivis', 'qffpt': 'fffls'}
+
+My observation: It seems like the double letter "ff" might cause some issues with my current mapping. We 
+have the word 'qffpdvit'->'ffflivis', which only makes sense if "f" maps to "e". 
+
+process execution 3:
+1. maintained the mapping of "b"->"a"
+2. I added the mapping "f"->"e" for this execution.
+3. I also added "v"->"n" because I noticed that I had a two letter word "dv"->"iv" which could map to "in".
+This would also, with my new "f"->"e" map indicate "rffv"->"reen" mapping, which opens up possibilies for a 
+future "r" mapping.
+
+So my currentMapping for this execution was:
+currentMapping = {"b":"a", "p":"l", "j":"o", "s":"t", "t":"s", "d":"i", "q":"f", "f":"e", "v":"n"}
+
+4. Next I updated the dictionaries with the new mapping, and listed the results:
+
+translated one letter words:  {'b': 'a'}
+translated two letter words:  {'jq': 'of', 'dt': 'is', 'en': 'en', 'sj': 'to', 'rk': 'rk', 'dv': 'in', 'ds': 'it'}
+translated double letter words:  {'bpp': 'all', 'rffv': 'reen', 'qbpp': 'fall', 'tellfv': 'sellen', 'bwwfnsbvwf': 'awwentanwe', 'qdppt': 'fills', 'bubcfvftt': 'auaceness', 'sjj': 'too', 'qffpdvit': 'feelinis', 'qffpt': 'feels'}
+
+My observation: I noticed that only one letter from 'qffpdvit'->'feelinis' had not been translated. 
+The only mapping that made sense to complete this word is "i"->"g". This is promising because "i" doesn't appear
+in any of the encrypted two letter words, and I don't know of any two letter words with "g" apart from "go"
+At the next execution I'm going to start printing out the whole encrypted text mapping to make sure I'm on
+the right track.
+
+process execution 4:
+1. maintained the mapping of "b"->"a"
+2. I added the mapping "w"->"c" to complete the translation of the double letter word of 'bwwfnsbvwf' from 'awwentanwe' 
+to "acceptance".
+3. the above change necessitated adding the mapping "n"->"p", which further necessitated the addition of 
+an "e"->"u" mapping to make the two letter word "en" make sense as "up". 
+As observed above, I needed to make the mapping "i"->"g" to make "qffpdvit" make sense as "feelings"
+
+So my currentMapping for this execution was:
+currentMapping = {"b":"a", "p":"l", "j":"o", "s":"t", "t":"s", "d":"i", "q":"f", "f":"e", "v":"n", "w":"c", "n":"p", "e":"u", "i":"g"}
+
+4. Next I updated the dictionaries with the new mapping, and listed the results, including the full encrypted file:
+
+translated one letter words:  {'b': 'a'}
+translated two letter words:  {'jq': 'of', 'dt': 'is', 'en': 'up', 'sj': 'to', 'rk': 'rk', 'dv': 'in', 'ds': 'it'}
+translated double letter words:  {'bpp': 'all', 'rffv': 'reen', 'qbpp': 'fall', 'tellfv': 'sullen', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'fills', 'bubcfvftt': 'auaceness', 'sjj': 'too', 'qffpdvit': 'feelings', 'qffpt': 'feels'}
+full translated text:  
+all tme xacietk, cmacg, reautk of life is gale up ligmt anl smalou. 
+lak tmat mal reen cleac rcigmt regan to cloul oxec; lcops cain fall. 
+one rk one, tmose acounl sougmt smeltec, rut tmece uas a yinl huiet peace in sullen cmange. 
+sogetming calging acceptance umat coges, cesignation uneopectel, fills meact uitm neu auaceness. 
+ginl, too, liye uocll outsile, smifts cmanges, alapting ueatmec tmougmts feelings. 
+it tmese gogents tcansfocgation feels gost alixe, auace leptms gkstecies uitmin.
+
+My observation: It seems clear that "m" maps to "h" to translate encrypted words "tme", "ligmt", and "tmose"
+to "the", "light", and "these", respectively.
+
+
+process execution 5:
+1. maintained the mapping of "b"->"a"
+2. 
+3. added a "m"->"h" mapping. 
+I want to map the two letter word "rk", but I can't determine what the possible mapping might be for either 
+"r" or "k". So in this execution I performed an additional step of determining the probability of "r" and "k" 
+in the full encrypted text to see if they could be uncommon letters.
+
+I found that the most uncommon letters (with counts less than 10) in the encrypted text were:
+[['h', 1], ['o', 1], ['x', 3], ['y', 3], ['k', 5], ['r', 7], ['n', 7]]
+The second value in each list is the number of times it appears in the full encrypted text.
+From this information, I determined that "r" and "k" were pretty uncommon, "k" being the more uncommon of the two.
+According to https://www3.nd.edu/~busiforc/handouts/cryptography/Letter%20Frequencies.html, the 7 least common 
+english letters are 
+z, q, x, j, k, v, and b
+Based on this, I decided to map "r"->"b" and "k"->"y" to translate "rk"->"by". This makes sense with the double letter 
+word "rffv"->"been".
+I was interested to find out if there are any real "q"s in the translated text, so I iterated through 
+the encrypted words to find if any of the most uncommon encrypted letters I had found appeared before 
+a translated "e"->"u" mapping. There were no words that fit this query, which made sense given that 
+the total number of unique letters in the encrypted text, excluding punctuation, is 24, meaning that not 
+every letter of the english alphabet is represented in the text, at least not in a 1-to-1 mapping.
+
+
+So my currentMapping for this execution was:
+currentMapping = {"b":"a", "p":"l", "j":"o", "s":"t", "t":"s", "d":"i", "q":"f", "f":"e", "v":"n", "w":"c", "n":"p", "e":"u", "i":"g", "m":"h", "r":"b", "k":"y"}
+
+4. Next I updated the dictionaries with the new mapping, and listed the results, including the full encrypted file:
+
+translated one letter words:  {'b': 'a'}
+translated two letter words:  {'jq': 'of', 'dt': 'is', 'en': 'up', 'sj': 'to', 'rk': 'by', 'dv': 'in', 'ds': 'it'}
+translated double letter words:  {'bpp': 'all', 'rffv': 'been', 'qbpp': 'fall', 'tellfv': 'sullen', 'bwwfnsbvwf': 'acceptance', 'qdppt': 'fills', 'bubcfvftt': 'auaceness', 'sjj': 'too', 'qffpdvit': 'feelings', 'qffpt': 'feels'}
+full translated text:  
+all the xaciety, chacg, beauty of life is gale up light anl shalou. 
+lay that hal been cleac bcight began to cloul oxec; lcops cain fall. 
+one by one, those acounl sought sheltec, but thece uas a yinl huiet peace in sullen change. 
+sogething calging acceptance uhat coges, cesignation uneopectel, fills heact uith neu auaceness. 
+ginl, too, liye uocll outsile, shifts changes, alapting ueathec thoughts feelings. 
+it these gogents tcansfocgation feels gost alixe, auace lepths gystecies uithin.
+
+My observation: it's clear that some of my translations are off. Specifically, I notice that I have mappings 
+for both "r"->"b" and "w"->"c", but these in combination make the word "bcight"
+It seems like in general, there are way too many c's in the text. I checked the most common letters in the 
+encrypted text and found them to be:
+[['f', 67], ['s', 57], ['b', 48], ['m', 38], ['v', 38], ['j', 36], ['d', 32], ['t', 31], ['l', 23], ['p', 21]]
+The 17 most common english letters are:
+e, t, a, o, i, n, s, h, r, d
+I notice that "l"->"d" might be a good mapping to make sense of the partially translated "cloul" to "cloud" 
+and "hal" to "had". 
+
+
+process execution :
+1. maintained the mapping of "b"->"a"
+2. 
+3. 
+So my currentMapping for this execution was:
+
+4. Next I updated the dictionaries with the new mapping, and listed the results, including the full encrypted file:
+
+
+
+My observation:
+
+process execution :
+1. maintained the mapping of "b"->"a"
+2. 
+3. 
+So my currentMapping for this execution was:
+
+4. Next I updated the dictionaries with the new mapping, and listed the results, including the full encrypted file:
+
+
+
+My observation:
