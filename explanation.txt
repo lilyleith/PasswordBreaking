@@ -1,0 +1,24 @@
+To break the ciphertext, I started by taking inventory of the words and sorting them into groups. I generated 
+lists of all the one letter, two letter, three letter, and four letter words as well as any words that had 
+double letters in them. I also generated a list of all the unique letters in the ciphertext and ordered 
+them in descending order of frequency. To start my mapping, I matched up the most common letters in 
+the ciphertext to some of the most common letters in English, from 
+https://www3.nd.edu/~busiforc/handouts/cryptography/Letter%20Frequencies.html. I also looked at the most common 
+two, three, and four letter english words from https://www3.nd.edu/~busiforc/handouts/cryptography/cryptography%20hints.html. 
+I started with a small mapping of currentMapping = {"b":"a", "f":"e", "s":"t"}. I implemented the mapping 
+in analysis.py, regenerated all the information and the full text, and looked for patterns.
+I repeated this process around 5 times until I had mapped each ciphertext letter to its plaintext letter. 
+For the first few rounds, I focused on completing the two and three letter words in conjunction with 
+resolving the double letters and matching the frequency of a letter in the ciphertext to what its 
+translation might be in english. After those were filled in, I was able to complete larger words in the text.
+
+To achieve this, I made several helper functions that allowed me to retranslate the ciphertext and all the lists 
+of words using a new updated mapping, such as translateWordDict, translateWordList, and countLetters. 
+Each time I updated the mapping I updated every list mentioned above and looked for patterns. When I tried this 
+task for the first time, I got preoccupied by calculating the probability of each letter in the text and 
+trying to match them up with stats that I found online. In my successful attempt at the task, I lined up 
+the ordered list of cipher letters with the ordered list of english letters and simply made mappings if their 
+positions generally lined up. Also, I noticed quickly that not all letters in the alphabet were represented 
+in the ciphertext. Luckily I didn't try to create a non 1-to-1 mapping, as that would have wasted time since 
+not all letters were represented in the plaintext either. It was easy to assume that for the purposes of 
+cracking user7's password that "z" would map to "a" and "j" would map to "z".

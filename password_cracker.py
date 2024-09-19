@@ -231,10 +231,6 @@ if __name__ == '__main__':
     # stores salts of dictionary words we have found so far. marginally helps saving runtime
     saltsFoundSoFar = {}
 
-    subs = open("substitutions.txt", "w")
-    for word, sub in mappedWords.items():
-        subs.write(word + " " + sub + "\n")
-    subs.close()
     # leetSpeakPasswordFound is set to 1 and returned within the hashing function if we have successfully found the
     # user that uses leetSpeak
     leetSpeakPasswordFound = 0
@@ -267,7 +263,6 @@ if __name__ == '__main__':
         password = hashedPasswords[user]
         # init truePassword
         truePassword = ""
-        
         
         user_start = time.perf_counter()
 
