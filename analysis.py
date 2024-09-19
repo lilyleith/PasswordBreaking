@@ -2,12 +2,11 @@ import hashlib
 import time
 import numpy as np
 
-# create functions for decrypting
-# reference all sources used for readme
 
 # this function returns 1 if there is a double letter combination in a word, and 0 if there is not
 def doubleLetter(word):
     currLetter = ""
+    # look at all adjacent letters, check if they are the same
     for index in range(1, len(word)):
         if word[index - 1] == word[index]:
             return 1
@@ -21,7 +20,7 @@ def translateOneLetterWords(currentMapping, oneLetterWords):
     oneLetterWords["b"] = currentMapping["b"]
     return oneLetterWords
 
-# translate the wordList using currentMapping 
+# translate the wordDict using currentMapping 
 def translateWordDict(currentMapping, wordDict):
     
     for encryptedWord in wordDict.keys():
@@ -63,10 +62,8 @@ def translateWordList(currentMapping, encryptedWords):
     return wordList
     
         
-
-
-# create and return a dict with keys that are unique words of len length from the encrypted text and the
-# values are empty strings
+# create and return a dict with keys that are unique words of len length from the encrypted text
+# the dict is ordered by the frequency with which the words appear in the text
 def createWordDictByLength(encryptedWords, length):
     # create dict
     wordList = {}
@@ -78,6 +75,7 @@ def createWordDictByLength(encryptedWords, length):
                 wordList[word] = 1
             else:
                 wordList[word] +=1
+    # sort and return
     wordList = dict(sorted(wordList.items(), key = lambda item:item[1], reverse = True))
     return wordList
             
@@ -97,24 +95,13 @@ def countLetters(encryptedWords):
             # if in the dict, increment the value by 1
             else:
                 letterCounts[letter] += 1
-    # order the letters in ascending order of frequency and return as a list of tuples
+    # order the letters in descending order of frequency and return as a dict
     letterCounts = dict(sorted(letterCounts.items(), key = lambda item:item[1], reverse = True))
     return letterCounts
 
-
+# main function
 if __name__ == '__main__':
-    # these dicts will hold the encrypted text words as the key, and the value will be the unencrypted word
-    # based on the current mapping that I'm testing
-    doubleLetterWords = {}
-    oneLetterWords = {}
-    twoLetterWords = {}
-
-    # these lists hold the encrypted words that have double letters, just a single letter, or just two letters.
-    # I made these in addition to the dictionaries for ease of printing in my first analysis of the text
-    doubleLetterWordsList = []
-    oneLetterWordsList = []
-    twoLetterWordsList = []
-
+    
     # a list of the encrypted words in the encryption.txt file stripped of punctuation
     encrytedWords = []
 
@@ -148,7 +135,7 @@ if __name__ == '__main__':
         if doubleLetter(word):
             doubleLetterWords[word] = ""
 
-    # printed out the dicts i just created. commented out for submission
+    # printed out the dicts I just created. commented out for submission
 
     # print("One letter words: ", list(oneLetterWords.keys()))
     # print("Two letter words: ", list(twoLetterWords.keys()))
@@ -180,19 +167,12 @@ if __name__ == '__main__':
     # translate the entire file
     fullTranslation = translateWordList(currentMapping, encryptedWordsWithPunctuation)
 
-    
-
     # count the instances of each letter in the encrypted text to determine which might map to 
     # uncommon english letters
     letterCounts = countLetters(encrytedWords)
-    mostUncommonLetters = [[key, letterCounts[key]] for key in letterCounts.keys() if letterCounts[key] < 10]
-    mostCommonLetters = [[key, letterCounts[key]] for key in letterCounts.keys() if letterCounts[key] > 20]
-    mostCommonLetters.sort(key = lambda item:item[1], reverse = True)
-
 
     fullTranslation.append("\n")
 
-    
     # now I print these dicts and see if I can sense any pattern or success emerging
     # print statements are commented out for submission of analysis.py
 
@@ -205,11 +185,14 @@ if __name__ == '__main__':
     # print("full translated text:\n", " ".join(fullTranslation))
     # print("Letters ordered by decreasing frequency: ", letterCounts.keys())
 
+    # after printing and looking at the dicts I updated the mapping and ran the program again
+
     # I have found the full translation of the ciphertext. write it into a file for submission. 
-    plain = open("plaintext.txt", "w")
-    plaintext = " ".join(fullTranslation)
-    plain.write(plaintext.strip(" "))
-    plain.close()
+    # commented out for submission
+    # plain = open("plaintext.txt", "w")
+    # plaintext = " ".join(fullTranslation)
+    # plain.write(plaintext.strip(" "))
+    # plain.close()
 
 
 

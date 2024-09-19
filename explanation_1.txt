@@ -1,0 +1,29 @@
+First, I created a function hashCheck that simply iterates through each word in the dictionary.txt, hashes it 
+using the passed hashFunction, and checks if the hash matches the current password. I created the hashCheck 
+function so that I can pass the hash function I want to use as an argument, since different hashed password 
+lengths provide some indication of which hash function was used. After having success with the passwords 
+that were just hashed with no initial translation, I created a helper function leetSpeakConversion that 
+takes a word and returns a list of all possible leet speak translations of that word. Figuring out 
+the best way to generate all possible leet speak translations was the hardest part of the entire project.
+I saved the translations for each dictionary word in a dict and passed it through to the hashCheck function, 
+and updated the hashCheck function to hash and check each leet speak conversion of the current word.
+After finding success with leet speak, I made a helper function caesarConversion that I implemented in a very 
+similar way. I generated all the possible caesar shifts of each word, saved them in a dict, and passed it 
+through to hashCheck, which I updated to accommodate the new functionality.
+I then created a helper function appendSALT which takes a word and generates all the possible word(SALT) 
+possibilities. I didn't store the salts for every word in a dictionary because doing so would crash my 
+computer. Instead, I created a dictionary that was updated inside the hashCheck function when salts were 
+being checked. This dict is passed and returned from the hashCheck function. I hoped that this would take 
+off some of the runtime caused by repeatedly generating salts, while not taking up too much memory.
+Finally, I reversed the mapping I found in analysis.py and added the two missing mappings. I used this 
+mapping to make the substitution helper function. Again, I stored the translations of each word in a dict 
+that I passed to hashCheck. I updated hashCheck to hash the ciphertext and compare it to the hashed password.
+Runtimes for users and total:
+Elapsed time for user 1 12.047620728997572
+Elapsed time for user 2 34.36866571399878
+Elapsed time for user 3 0.15059744099562522
+Elapsed time for user 4 0.017772487000911497
+Elapsed time for user 5 0.006547706005221698
+Elapsed time for user 6 0.0013693860018975101
+Elapsed time for user 7 0.021212900996033568
+Total elapsed time:  47.315548680002394
