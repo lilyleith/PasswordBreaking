@@ -269,5 +269,8 @@ full translated text:
  feels most alive, most aware of the depths and mysteries within. 
 
 My observations: encrypted text is fully translated into plaintext.
+The only letters not represented in the ciphertext are "a" and "z". The only letters not represented in 
+the plaintext translation are "j" and "z". So it follows that to crack user7's password we can use the 
+mapping z->a and j->z
 
 

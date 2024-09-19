@@ -1,88 +1,14 @@
 import hashlib
-
 import time
-import numpy as np
 from itertools import product
-""" Program Flow
-- get dictionary into a file reader
-- get user names and passwords into a dictionary
-- create second dictionary for hashed passwords
-- hash passwords FIRST
-- initiate list of different hash methods as strings
-- 
-- 
- """
 
-
-
-# # first hash all the passwords and store them in hashedPasswords
-# for userPassword in shadow:
-#     user = userPassword.split(":")[0]
-#     password = userPassword.split(":")[1]
-
-
-# passwords = {}
-
-# with open("shadow", "r") as f2:
-#     for userPassword in f2:
-#         userPass = userPassword.split(":")
-#         passwords[userPass[0]] = userPass[1]
-#         hashedPasswords[userPass[0]] = ""
-    
-
-
-# for user in passwords.keys():
-#     pws = passwords[user]
-#     for h in hashes:
-#         hash = hashlib.new(h)
-#         hash.update(pws)
-#         hashedPasswords[user] = hash.hexdigest()
-#         """ for fOut in outFiles:
-#             with open(fOut,"w") as out:
-#                 for word in d:
-#                     hash2 = hashlib.new(h)
-#                     hash2.update(word.encode())
-#                     out.write(hash2.hexdigest() + "\n") """
-
-def md5(plaintext):
-    hash = hashlib.new("md5")
-    hash.update(plaintext.encode())
-    return hash.hexdigest()
-
-def sha1(plaintext):
-    hash = hashlib.new("sha1")
-    hash.update(plaintext.encode())
-    return hash.hexdigest()
-
-def sha224(plaintext):
-    hash = hashlib.new("sha224")
-    hash.update(plaintext.encode())
-    return hash.hexdigest()
-
-def sha256(plaintext):
-    hash = hashlib.new("sha256")
-    hash.update(plaintext.encode())
-    return hash.hexdigest()
-
-def sha384(plaintext):
-    hash = hashlib.new("sha384")
-    hash.update(plaintext.encode())
-    return hash.hexdigest()
-
-def sha512(plaintext):
-    hash = hashlib.new("sha512")
-    hash.update(plaintext.encode())
-    return hash.hexdigest()
-
-def sha3_224(plaintext):
-    hash = hashlib.new("sha3_224")
-    hash.update(plaintext.encode())
-    return hash.hexdigest()
 
 # returns all possible SALT options for the word
 def appendSALT(word):
     possibleSALTS = []
+    # iterate through numbers in range 0 to 99999
     for num in range(100000):
+        # create the salt and append
         SALT = str(num).zfill(5)
         possibleSALTS.append(word + SALT)
     return possibleSALTS
@@ -95,22 +21,28 @@ def caesarConversion(word):
     # list for all possible caesar translations
     caesarTranslations = []
 
+    # list of letters
     letters = [letter for letter in word]
     for shift in range(1, 26):
+        # empty list for the result
         caesar = ["" for i in range(len(word))]
         for index in range(len(word)):
+            # iterate through word, if the letter isn't in in the alphabet then skip it
             if letters[index] not in alphabet:
                 continue
+            # find the new index of the letter 
             newLetterIndex = (alphabet.index(letters[index]) + shift) % 26
+            # assign letter to new index
             caesar[index] = alphabet[newLetterIndex] 
         caesarTranslations.append("".join(caesar))
+    # return the list of caesar translations
     return caesarTranslations
 
 
 
 # translate a word into leetspeak
 def leetSpeakConversion(word):
-# 2 iterations as of right now
+    # list of possible translations, some letters just maps to themselves if I couldn't find a single letter mapping that made sense
     translations = {"a": ["4","@"], "b":["b", "8"], "c":["c", "["], "d":["d", ")"], "e":["3", "&"], "f":["f"], "g":["6", "&"], "h":["h", '#'], "i":["1", "!"], "j":["j"], "k":["k"], "l":["1","!"], "m":["m"],"n":["n"], "o":["0"], "p":["p", "9"], "q":["q"], "r":["r"], "s":["5", "$"], "t":["7", "+"], "u":["u"], "v":["v"], "w":["w"], "x":["x"], "y":["y"], "z":["2"], "q":["9"]}
 
     # list for all possible leet speak translations of the word
@@ -143,20 +75,22 @@ def leetSpeakConversion(word):
                 singleTranslations.append(letter)
 
     # create a matrix with 2^exponent rows of all binary combinations of (exponent) values
+    # this matrix basically holds all the possible permutations of each unique letter that has more than
+    # one mapping 
     binaryPossibilities = [list(x) for x in product([0, 1], repeat=exponent)]
     # from the binary possibilities matrix, create a matrix of dictionaries assigning the 
     # above values to each unique letter with multiple translations
     # this will allow us to test every single possible translation into leetspeak
     matrix = [{letter:binaryPossibilities[i][multipleTranslations.index(letter)]  for letter in multipleTranslations} for i in range(2**exponent)]
     
-    # for the single translation letter, replace it (no need to change it alongside the other letters)
+    # for the single translation letters, replace it (no need to change it alongside the other letters)
     for letter in singleTranslations:
         word = word.replace(letter, translations[letter][0])
     leetWord = word
 
     # for each combination in the matrix, iterate through
     for row in matrix:
-        # for each letter in the combination set replace the letter with its designated translation 
+        # for each letter in the permutation replace the letter with its designated translation 
         # determined by the matrix
         for letter in row.keys():
             leetWord = leetWord.replace(letter, translations[letter][row[letter]])
@@ -168,209 +102,91 @@ def leetSpeakConversion(word):
     # return all possible conversions list
     return possibleConversions
 
-# this function checks the simplest case in which the password is only encrypted with one hash function
-# passed are the hashed password from shadow, the list of all leetSpeakConversions of every word in dictionary,
-# and a boolean value indicating if we have already found the user that is using the leetspeak, so we don't
-# repeat work
-def checkSimpleHashes(password, leetSpeakConversions, caesarShifts, haveFoundLeetSpeak, isUser3, haveFoundSALT, saltsFoundSoFar):
+# function returns the encrypted word using the passed mapping
+def substitution(mapping, word):
+    # create list of the letters
+    letterList = [letter for letter in word]
+    # iterate through and change the letters based on the mapping
+    for index in range(len(letterList)):
+        if letterList[index] in mapping:
+            letterList[index] = mapping[letterList[index]]
+    # return the new word
+    return "".join(letterList)
 
-    
+
+# this function tries to find the hash of a dictionary entry that matches password
+# through a variety of substitions and translations
+# returns:
+# word if the password is found or ""
+# haveFoundLeetSpeak = 0 if we have not done the leetSpeak user yet, 1 if we have
+# haveFoundSALT = 0 if we have not done the SALT user yet, 1 if we have
+# saltsFoundSoFar: a dictionary that we can use to store the SALTS we have found so we save processing
+# time any way we can
+def hashCheck(password, leetSpeakConversions, caesarShifts, haveFoundLeetSpeak, isUser3, haveFoundSALT, saltsFoundSoFar, isUser7, substitutions, hashFunction):
+
     # iterate through each word in the dictionary 
     with open("dictionary.txt", "r") as dictionary:
         for word in dictionary:
             # take out newline character from dictionary word
             word = word.replace("\n", "")
             
-            # the length of md5 output is 32, so we can specify to check md5 for passwords of length 32
-            # check the md5 hash for both the leet speak versions and the regular word
-            if len(password) == 32:
-                hashedWord = md5(word)
-                if hashedWord == password:
+            # first check if the user is user 3, if so, then create list of all the caesar shifts of
+            # the current word
+            if isUser3 == 1:
+                caesarShiftList = caesarShifts[word]
+                # hash each caesar shift translation and check if it matches the password hash
+                for caesar in caesarShiftList:
+                    hash = hashlib.new(hashFunction)
+                    hash.update(caesar.encode())
+                    hashedCaesar = hash.hexdigest()
+                    # return if we have a match
+                    if hashedCaesar == password:
+                        return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
+                # if the current user is user 7, then we get the list of the substitutions of the current word
+            elif isUser7 == 1:
+                wordSub = substitutions[word]
+                # hash each substitution
+                hash = hashlib.new(hashFunction)
+                hash.update(wordSub.encode())
+                hashedSub = hash.hexdigest()
+                # return if we have a match
+                if hashedSub == password:
                     return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                
-                # if we have not found leet speak user, then test leet speak list
-                if haveFoundLeetSpeak == 0:
-                    leetSpeakList = leetSpeakConversions[word]
-                    for leetSpeakWord in leetSpeakList:
-                        hashedLeetSpeak = md5(leetSpeakWord)
-                        if hashedLeetSpeak == password:
-                            return word, 1, haveFoundSALT, saltsFoundSoFar
-                if isUser3 == 1:
-                    
-                    caesarShiftList = caesarShifts[word]
-                    for caesar in caesarShiftList:
-                        hashedCaesar = md5(caesar)
-                        if hashedCaesar == password:
-                            return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-
-                if haveFoundSALT == 0:
-                    if word not in saltsFoundSoFar:
-                        saltsFoundSoFar[word] = appendSALT(word)
-                    SALTList = saltsFoundSoFar[word]
-                    for SALT in SALTList:
-                        hashedSALT = md5(SALT)
-                        if hashedSALT == password:
-                            return word, haveFoundLeetSpeak, 1, saltsFoundSoFar
-                
-                
-            # the length of sha1 output is 40, so we can specify to check sha1 for passwords of length 40
-            # check the sha1 hash for both the leet speak versions and the regular word 
-            if len(password) == 40:
-                hashedWord = sha1(word)
-                if hashedWord == password:
-                    return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                # if we have not found leet speak user, then test leet speak list
-                if haveFoundLeetSpeak == 0:
-                    leetSpeakList = leetSpeakConversions[word]
-                    for leetSpeakWord in leetSpeakList:
-                        hashedLeetSpeak = sha1(leetSpeakWord)
-                        if hashedLeetSpeak == password:
-                            return word, 1, haveFoundSALT, saltsFoundSoFar
-                if isUser3 == 1:
-                    caesarShiftList = caesarShifts[word]
-                    for caesar in caesarShiftList:
-                        hashedCaesar = sha1(caesar)
-                        if hashedCaesar == password:
-                            return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                
-                if haveFoundSALT == 0:
-                    if word not in saltsFoundSoFar:
-                        saltsFoundSoFar[word] = appendSALT(word)
-                    SALTList = saltsFoundSoFar[word]
-                    for SALT in SALTList:
-                        hashedSALT = sha1(SALT)
-                        if hashedSALT == password:
-                            return word, haveFoundLeetSpeak, 1, saltsFoundSoFar
-
-
-                
-                
-            # the length of sha224 and sha3_224 output is 56, so we can specify to check sha224 and sha3_224for 
-            # passwords of length 56
-            # check the sha224 hash for both the leet speak versions and the regular word
-            if len(password) == 56:
-                hashedWord1 = sha224(word)
-                hashedWord2 = sha3_224(word)
-                if hashedWord1 == password or hashedWord2 == password:
-                    return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                # if we have not found leet speak user, then test leet speak list
-                if haveFoundLeetSpeak == 0:
-                    leetSpeakList = leetSpeakConversions[word]
-                    for leetSpeakWord in leetSpeakList:
-                        hashedLeetSpeak = sha224(leetSpeakWord)
-                        if hashedLeetSpeak == password:
-                            return word, 1, haveFoundSALT, saltsFoundSoFar
-                if isUser3 == 1:
-                    caesarShiftList = caesarShifts[word]
-                    for caesar in caesarShiftList:
-                        hashedCaesar = sha224(caesar)
-                        if hashedCaesar == password:
-                            return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                if haveFoundSALT == 0:
-                    if word not in saltsFoundSoFar:
-                        saltsFoundSoFar[word] = appendSALT(word)
-                    SALTList = saltsFoundSoFar[word]
-                    for SALT in SALTList:
-                        hashedSALT = sha224(SALT)
-                        if hashedSALT == password:
-                            del saltsFoundSoFar[word]
-                            return word, haveFoundLeetSpeak, 1, saltsFoundSoFar
-                    del saltsFoundSoFar[word]
-                
-             # the length of sha256 output is 64, so we can specify to check sha256 for passwords of length 64
-            # check the sha256 hash for both the leet speak versions and the regular word
-            if len(password) == 64:
-                hashedWord = sha256(word)
-                if hashedWord == password:
-                    return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                # if we have not found leet speak user, then test leet speak list
-                if haveFoundLeetSpeak == 0:
-                    leetSpeakList = leetSpeakConversions[word]
-                    for leetSpeakWord in leetSpeakList:
-                        hashedLeetSpeak = sha256(leetSpeakWord)
-                        if hashedLeetSpeak == password:
-                            return word, 1, haveFoundSALT, saltsFoundSoFar
-                if isUser3 == 1:
-                    caesarShiftList = caesarShifts[word]
-                    for caesar in caesarShiftList:
-                        hashedCaesar = sha256(caesar)
-                        if hashedCaesar == password:
-                            return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                if haveFoundSALT == 0:
-                    if word not in saltsFoundSoFar:
-                        saltsFoundSoFar[word] = appendSALT(word)
-                    SALTList = saltsFoundSoFar[word]
-                    for SALT in SALTList:
-                        hashedSALT = sha256(SALT)
-                        if hashedSALT == password:
-                            return word, haveFoundLeetSpeak, 1, saltsFoundSoFar
-                        
-            # the length of sha384 output is 96, so we can specify to check sha384 for passwords of length 96
-            # check the sha384 hash for both the leet speak versions and the regular word
-            if len(password) == 96:
-                hashedWord = sha384(word)
-                if hashedWord == password:
-                    return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                # if we have not found leet speak user, then test leet speak list
-                if haveFoundLeetSpeak == 0:
-                    leetSpeakList = leetSpeakConversions[word]
-                    for leetSpeakWord in leetSpeakList:
-                        hashedLeetSpeak = sha384(leetSpeakWord)
-                        if hashedLeetSpeak == password:
-                            return word, 1, haveFoundSALT, saltsFoundSoFar
-                if isUser3 == 1:
-                    
-                    caesarShiftList = caesarShifts[word]
-                    for caesar in caesarShiftList:
-                        hashedCaesar = sha384(caesar)
-                        if hashedCaesar == password:
-                            return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                        
-                if haveFoundSALT == 0:
-                    if word not in saltsFoundSoFar:
-                        saltsFoundSoFar[word] = appendSALT(word)
-                    SALTList = saltsFoundSoFar[word]
-                    for SALT in SALTList:
-                        hashedSALT = sha384(SALT)
-                        if hashedSALT == password:
-                            return word, haveFoundLeetSpeak, 1, saltsFoundSoFar
+            # now check the hashed value of the plain word, if it matches then return it
+            hash = hashlib.new(hashFunction)
+            hash.update(word.encode())
+            hashedWord = hash.hexdigest()
+            if hashedWord == password:
+                return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
             
-                
-            # the length of sha512 output is 128, so we can specify to check sha512 for passwords of length 128
-            # check the sha512 hash for both the leet speak versions and the regular word, and for the caesar cipher
-            # if the isUser3 argument is 1
-            if len(password) == 128:
-                hashedWord = sha512(word)
-                if hashedWord == password:
-                    return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                # if we have not found leet speak user, then test leet speak list
-                if haveFoundLeetSpeak == 0:
-                    leetSpeakList = leetSpeakConversions[word]
-                    for leetSpeakWord in leetSpeakList:
-                        hashedLeetSpeak = sha512(leetSpeakWord)
-                        if hashedLeetSpeak == password:
-                            return word, 1, haveFoundSALT, saltsFoundSoFar
-                if isUser3 == 1:
-                    
-                    caesarShiftList = caesarShifts[word]
-                    for caesar in caesarShiftList:
-                        hashedCaesar = sha512(caesar)
-                        if hashedCaesar == password:
-                            return word, haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-                        
-                if haveFoundSALT == 0:
-                    if word not in saltsFoundSoFar:
-                        saltsFoundSoFar[word] = appendSALT(word)
-                    SALTList = saltsFoundSoFar[word]
-                    for SALT in SALTList:
-                        hashedSALT = sha512(SALT)
-                        if hashedSALT == password:
-                            return word, haveFoundLeetSpeak, 1, saltsFoundSoFar
-                
+            # if we have not found leet speak user, then test leet speak list for the current word
+            if haveFoundLeetSpeak == 0:
+                leetSpeakList = leetSpeakConversions[word]
+                for leetSpeakWord in leetSpeakList:
+                    # hash the leetSpeakWord, if it matches then return the original word
+                    hash = hashlib.new(hashFunction)
+                    hash.update(leetSpeakWord.encode())
+                    hashedLeetSpeak = hash.hexdigest()
+                    if hashedLeetSpeak == password:
+                        return word, 1, haveFoundSALT, saltsFoundSoFar
+            
+            # if we have not yet found the salt user, then we hash all the possible salts for 
+            # the current word
+            if haveFoundSALT == 0:
+                # if the word is not in the salts dictionary, add it
+                if word not in saltsFoundSoFar:
+                    saltsFoundSoFar[word] = appendSALT(word)
+                # create the list of salts
+                SALTList = saltsFoundSoFar[word]
+                # hash each salt, if it matches then return it
+                for SALT in SALTList:
+                    hash = hashlib.new(hashFunction)
+                    hash.update(SALT.encode())
+                    hashedSALT = hash.hexdigest()
+                    if hashedSALT == password:
+                        return word, haveFoundLeetSpeak, 1, saltsFoundSoFar
+            
     return "", haveFoundLeetSpeak, haveFoundSALT, saltsFoundSoFar
-
-
-
 
 if __name__ == '__main__':
     start_time = time.perf_counter()
@@ -392,24 +208,40 @@ if __name__ == '__main__':
     hashedWords = {}
     i = 0
 
-    # create a dictionary of all the possible leetspeak conversions of each word in the dictionary
+    # create a dictionary of all the possible leetspeak conversions of each word in dictionary.txt
     leetSpeakConversions = {}
     # create a dictionary of all the possible caesar shifts of each word in dictionary.txt
     caesarShifts = {}
-    # create a dictionary of all the possible SALT appendages of each word in dictionary.txt
-    #SALTS = {}
+
+    # based on work in analysis.py, we have this substitution key for user 7:
+    # added mapping from "z"->"a" and from "j"->"z" since these were not included in the encrypted text solution
+    currentMapping = {"a":"b", "e":"f", "t":"s", "o":"j", "h":"m", "l":"p", "n":"v", "d":"l", "i":"d", "s":"t", "c":"w", "p":"n", "w":"u", "b":"r", "y":"k", "u":"e", "m":"g", "f":"q", "r":"c", "g":"i", "v":"x", "k":"y", "q":"h", "x":"o", "z":"a", "j":"z"}
+    # create a dictionary of the user7 substitutions for each word in dictionary.txt
+    mappedWords = {}
 
     # iterate through the words in dictionary.txt and find the leetspeak conversion, caesar
-    # shift conversions and SALTS for each word, store in their respective dicts
+    # shift conversions, and user7 substitution for each word store in their respective dicts
     for word in dictionary:
         word = word.replace("\n", "")
         leetSpeakConversions[word] = leetSpeakConversion(word)
         caesarShifts[word] = caesarConversion(word)
         #SALTS[word] = appendSALT(word)
+        mappedWords[word] = substitution(currentMapping, word)
+
+    # stores salts of dictionary words we have found so far. marginally helps saving runtime
     saltsFoundSoFar = {}
-        
+
+    subs = open("substitutions.txt", "w")
+    for word, sub in mappedWords.items():
+        subs.write(word + " " + sub + "\n")
+    subs.close()
+    # leetSpeakPasswordFound is set to 1 and returned within the hashing function if we have successfully found the
+    # user that uses leetSpeak
     leetSpeakPasswordFound = 0
+    # SALTPasswordFound is set to 1 and returned within the hashing function if we have successfully found the
+    # user that uses a SALT
     SALTPasswordFound = 0
+
     # iterate through each user-password combination in the shadow file
     for userPassword in shadow:
         # derive the user and password hash
@@ -417,49 +249,72 @@ if __name__ == '__main__':
         password = userPassword.split(":")[1].replace("\n","")
         # add each user and password combination to the hashedPasswords dict
         hashedPasswords[user] = password
-        
-       
+    
+    # track the current user for printing runtimes
+    userCount = 1
+
     # iterate through the dictionary and try a simple hash, leet code conversion and caesar on each one
     for user in hashedPasswords.keys():
         # set an indicator if this is user 3 so we know to do caesar operations in hash function
         isUser3 = 0
+        isUser7 = 0
         if user == "user3":
             isUser3 = 1
+        elif user == "user7":
+            isUser7 = 1
         
+        # get password from user password dict
         password = hashedPasswords[user]
-        # add result of the checkSimpleHashes() function to the truePasswords dict if it's a valid
-        # password
+        # init truePassword
+        truePassword = ""
         
-        simpleResult, leetSpeakPasswordFound, SALTPasswordFound, saltsFoundSoFar = checkSimpleHashes(password, leetSpeakConversions, caesarShifts, leetSpeakPasswordFound, isUser3, SALTPasswordFound, saltsFoundSoFar)
-        if (simpleResult != ""):
-            truePasswords[user] = simpleResult
+        
+        user_start = time.perf_counter()
+
+        # we can expedite the hashing process by checking the length of the hashed password and only
+        # performing hash functions that would give an output of the same length
+        # for each call of the function we pass through information that helps cut down runtime by
+        # not hashing all translations (leetspeak, caesar, etc.) for every password 
+
+        # len md5 = 32 
+        if len(password) == 32:
+            truePassword, leetSpeakPasswordFound, SALTPasswordFound, saltsFoundSoFar = hashCheck(password, leetSpeakConversions, caesarShifts, leetSpeakPasswordFound, isUser3, SALTPasswordFound, saltsFoundSoFar, isUser7, mappedWords, "md5")
+        # len sha1 = 40
+        elif len(password) == 40:
+            truePassword, leetSpeakPasswordFound, SALTPasswordFound, saltsFoundSoFar = hashCheck(password, leetSpeakConversions, caesarShifts, leetSpeakPasswordFound, isUser3, SALTPasswordFound, saltsFoundSoFar, isUser7,mappedWords, "sha1")
+        # len sha224 = 56 and len sha3_224 = 56, check both if sha224 doesn't work
+        elif len(password) == 56:
+            truePassword, leetSpeakPasswordFound, SALTPasswordFound, saltsFoundSoFar = hashCheck(password, leetSpeakConversions, caesarShifts, leetSpeakPasswordFound, isUser3, SALTPasswordFound, saltsFoundSoFar, isUser7, mappedWords,"sha224")
+            if truePassword == "":
+                truePassword, leetSpeakPasswordFound, SALTPasswordFound, saltsFoundSoFar = hashCheck(password, leetSpeakConversions, caesarShifts, leetSpeakPasswordFound, isUser3, SALTPasswordFound, saltsFoundSoFar, isUser7, mappedWords, "sha3_224")
+        # len sha256 = 64
+        elif len(password) == 64:
+            truePassword, leetSpeakPasswordFound, SALTPasswordFound, saltsFoundSoFar = hashCheck(password, leetSpeakConversions, caesarShifts, leetSpeakPasswordFound, isUser3, SALTPasswordFound, saltsFoundSoFar, isUser7, mappedWords, "sha256")
+        # len sha512 = 128 and len sha3_512 = 128, check both if sha512 doesn't work
+        elif len(password) == 128:
+            truePassword, leetSpeakPasswordFound, SALTPasswordFound, saltsFoundSoFar = hashCheck(password, leetSpeakConversions, caesarShifts, leetSpeakPasswordFound, isUser3, SALTPasswordFound, saltsFoundSoFar, isUser7, mappedWords, "sha512")
+            if truePassword == "":
+                truePassword, leetSpeakPasswordFound, SALTPasswordFound, saltsFoundSoFar = hashCheck(password, leetSpeakConversions, caesarShifts, leetSpeakPasswordFound, isUser3, SALTPasswordFound, saltsFoundSoFar, isUser7, mappedWords, "sha3_512")
+
+        # if the password is valid, add it to truePasswords
+        if (truePassword != ""):
+            truePasswords[user] = truePassword
+            user_end = time.perf_counter()
+            #print("Elapsed time for user", userCount, user_end-user_start)
+            userCount += 1
+
+    # close the files
     dictionary.close()
     shadow.close()
-
+    # write to the passwords file with the results
     with open("passwords.txt", "w") as output:
         for user in truePasswords.keys():
             output.write(user + ":" + truePasswords[user] + "\n")
 
-        
- 
-    
-    # # now we start other methods of password breaking beyond the simple hash, caesar and leet code
-    # # for the passwords that weren't cracked in the first try
-    # # this avoids doing long computations like SALT for every single user attempt
-
-    # for user in hashedPasswords.keys():
-    #     if user not in truePasswords:
-    #         password = hashedPasswords[user]
-
-        
-        
-        
-        
-    #print(truePasswords)
 
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
-    #print("Elapsed time: ", elapsed_time)
+    #print("Total elapsed time: ", elapsed_time)
 
 
 
